@@ -6,3 +6,5 @@ abstract interface class UseCase<SuccessType, Params> {
   /*use case is being used globally and different usecases have diffrent no. of parameters
    so we cannot hardcode the parameters that's why we are using Params type parameter for dynamic value */
 }
+
+class NoParams{}

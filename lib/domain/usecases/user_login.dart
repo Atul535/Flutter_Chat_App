@@ -4,31 +4,25 @@ import 'package:chat_app/domain/entities/user.dart';
 import 'package:chat_app/domain/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class UserSignUp implements UseCase<User, UserSignupParams> {
+class UserLogin implements UseCase<User, UserLoginParams> {
   final AuthRepository authRepository;
-  const UserSignUp(this.authRepository);
 
+  UserLogin(this.authRepository);
   @override
-  Future<Either<Failure, User>> call(UserSignupParams params) async {
-    return await authRepository.signUpWithEmailAndPassword(
-      name: params.name,
+  Future<Either<Failure, User>> call(params) async {
+    return await authRepository.loginEmailAndPassword(
       email: params.email,
-      mobile: params.mobile,
       password: params.password,
     );
   }
 }
 
-class UserSignupParams {
-  final String name;
+class UserLoginParams {
   final String email;
-  final String mobile;
   final String password;
 
-  UserSignupParams({
-    required this.name,
+  UserLoginParams({
     required this.email,
-    required this.mobile,
     required this.password,
   });
 }

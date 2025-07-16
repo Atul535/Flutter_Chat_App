@@ -1,31 +1,18 @@
-import 'package:chat_app/core/supabase_url/app_secrets.dart';
 import 'package:chat_app/core/theme/theme.dart';
-import 'package:chat_app/data/datasources/auth_remote_data_source.dart';
-import 'package:chat_app/data/repositories/auth_repository_impl.dart';
-import 'package:chat_app/domain/usecases/user_sign_up.dart';
-import 'package:chat_app/presentation/bloc/auth_bloc.dart';
+import 'package:chat_app/di/init_dependency.dart';
+import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final supabase = await Supabase.initialize(
-    url: AppSecrets.supabaseUrl,
-    anonKey: AppSecrets.supabaseAnnonKey,
-  );
+  await initDependency();
   runApp(
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => AuthBloc(
-            userSignUp: UserSignUp(
-              AuthRepositoryImpl(
-                AuthRemoteDataSourceImpl(supabase.client),
-              ),
-            ),
-          ),
+          create: (_) => serviceLocator<AuthBloc>(),
         ),
       ],
       child: const MyApp(),
@@ -33,8 +20,19 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(AuthCurrentUser());
+  }
 
   @override
   Widget build(BuildContext context) {

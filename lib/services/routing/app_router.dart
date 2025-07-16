@@ -1,5 +1,5 @@
-import 'package:chat_app/presentation/pages/login_page.dart';
-import 'package:chat_app/presentation/pages/signup_page.dart';
+import 'package:chat_app/presentation/auth/pages/login_page.dart';
+import 'package:chat_app/presentation/auth/pages/signup_page.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:go_router/go_router.dart';
 
