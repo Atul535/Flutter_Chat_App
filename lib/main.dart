@@ -12,7 +12,7 @@ Future<void> main() async {
     MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => serviceLocator<AuthBloc>(),
+          create: (_) => serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
         ),
       ],
       child: const MyApp(),
@@ -28,11 +28,11 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<AuthBloc>().add(AuthCurrentUser());
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   context.read<AuthBloc>().add(AuthCurrentUser());
+  // }
 
   @override
   Widget build(BuildContext context) {
