@@ -46,6 +46,9 @@ class _LoginPageState extends State<LoginPage> {
             if (state is AuthFailure) {
               snackBar(context, state.message);
             }
+            if (state is AuthSuccess) {
+              appRouter.go(RouteNames.home);
+            }
           },
           builder: (context, state) {
             if (state is AuthLoading) {
