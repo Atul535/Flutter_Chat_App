@@ -4,6 +4,7 @@ import 'package:chat_app/presentation/auth/pages/login_page.dart';
 import 'package:chat_app/presentation/auth/pages/signup_page.dart';
 import 'package:chat_app/presentation/chat/pages/chat_page.dart';
 import 'package:chat_app/presentation/chat/pages/message_page.dart';
+import 'package:chat_app/presentation/chat/pages/my_profile.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -21,20 +22,16 @@ final GoRouter appRouter = GoRouter(
     final authState = serviceLocator<AuthBloc>().state;
     final isLoggedIn = authState is AuthSuccess;
     final isLoading = authState is AuthLoading || authState is AuthInitial;
-    final goingToLogin = state.fullPath == RouteNames.login;
-    final goingToSignup = state.fullPath == RouteNames.signup;
-    if (isLoading) {
-      return null;
-    }
+    final goingToAuth = state.fullPath == RouteNames.login ||
+        state.fullPath == RouteNames.signup;
 
-    if (!isLoggedIn && state.fullPath == RouteNames.home) {
+    if (isLoading) {}
+    if (!isLoggedIn && !goingToAuth) {
       return RouteNames.login;
     }
-
-    if (isLoggedIn && (goingToLogin || goingToSignup)) {
+    if (isLoggedIn && goingToAuth) {
       return RouteNames.home;
     }
-
     return null;
   },
   routes: [
@@ -53,6 +50,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.message,
       builder: (context, state) => const MessagePage(),
+    ),
+    GoRoute(
+      path: RouteNames.profile,
+      builder: (context, state) => const MyProfile(),
     ),
   ],
 );

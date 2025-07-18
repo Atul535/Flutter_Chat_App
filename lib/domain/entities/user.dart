@@ -10,4 +10,11 @@ class User {
     required this.mobile,
     required this.email,
   });
+
+  factory User.emptyFactory() => User(
+        id: '',
+        name: '',
+        email: '',
+        mobile: '',
+      );
 }

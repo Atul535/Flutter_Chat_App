@@ -3,6 +3,7 @@ import 'package:chat_app/data/datasources/auth_remote_data_source.dart';
 import 'package:chat_app/data/repositories/auth_repository_impl.dart';
 import 'package:chat_app/domain/repositories/auth_repository.dart';
 import 'package:chat_app/domain/usecases/current_user.dart';
+import 'package:chat_app/domain/usecases/logout_user.dart';
 import 'package:chat_app/domain/usecases/user_login.dart';
 import 'package:chat_app/domain/usecases/user_sign_up.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
@@ -29,9 +30,11 @@ void _initAuth() {
     ..registerFactory<UserSignUp>(() => UserSignUp(serviceLocator()))
     ..registerFactory<UserLogin>(() => UserLogin(serviceLocator()))
     ..registerFactory<CurrentUser>(() => CurrentUser(serviceLocator()))
+    ..registerFactory<LogoutUser>(() => LogoutUser(serviceLocator()))
     ..registerFactory<AuthBloc>(() => AuthBloc(
           userSignUp: serviceLocator(),
           userLogin: serviceLocator(),
           currentUser: serviceLocator(),
+          logoutUser: serviceLocator(),
         ));
 }
