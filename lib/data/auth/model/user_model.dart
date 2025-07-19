@@ -1,4 +1,4 @@
-import 'package:chat_app/domain/entities/user.dart';
+import 'package:chat_app/domain/auth/entities/user.dart';
 
 class UserModel extends User {
   UserModel({

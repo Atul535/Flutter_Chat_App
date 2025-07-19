@@ -1,9 +1,9 @@
 import 'package:chat_app/core/usecases/usecase.dart';
-import 'package:chat_app/domain/entities/user.dart';
-import 'package:chat_app/domain/usecases/current_user.dart';
-import 'package:chat_app/domain/usecases/logout_user.dart';
-import 'package:chat_app/domain/usecases/user_login.dart';
-import 'package:chat_app/domain/usecases/user_sign_up.dart';
+import 'package:chat_app/domain/auth/entities/user.dart';
+import 'package:chat_app/domain/auth/usecases/current_user.dart';
+import 'package:chat_app/domain/auth/usecases/logout_user.dart';
+import 'package:chat_app/domain/auth/usecases/user_login.dart';
+import 'package:chat_app/domain/auth/usecases/user_sign_up.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

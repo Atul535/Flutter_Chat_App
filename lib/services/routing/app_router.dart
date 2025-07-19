@@ -3,6 +3,7 @@ import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/auth/pages/login_page.dart';
 import 'package:chat_app/presentation/auth/pages/signup_page.dart';
 import 'package:chat_app/presentation/chat/pages/chat_page.dart';
+import 'package:chat_app/presentation/chat/pages/contact_page.dart';
 import 'package:chat_app/presentation/chat/pages/message_page.dart';
 import 'package:chat_app/presentation/chat/pages/my_profile.dart';
 import 'package:chat_app/services/routing/route_name.dart';
@@ -54,6 +55,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.profile,
       builder: (context, state) => const MyProfile(),
+    ),
+    GoRoute(
+      path: RouteNames.contact,
+      builder: (context, state) => const ContactPage(),
     ),
   ],
 );

@@ -1,13 +1,15 @@
+import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/core/utils/exception.dart';
 import 'package:chat_app/core/utils/failure.dart';
-import 'package:chat_app/data/datasources/auth_remote_data_source.dart';
-import 'package:chat_app/domain/entities/user.dart';
-import 'package:chat_app/domain/repositories/auth_repository.dart';
+import 'package:chat_app/data/auth/datasources/auth_remote_data_source.dart';
+import 'package:chat_app/domain/auth/entities/user.dart';
+import 'package:chat_app/domain/auth/repositories/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
-  const AuthRepositoryImpl(this.authRemoteDataSource);
+  final NetworkInfo networkInfo;
+  const AuthRepositoryImpl(this.authRemoteDataSource, this.networkInfo);
   @override
   Future<Either<Failure, User>> loginEmailAndPassword(
       {required String email, required String password}) async {
@@ -16,7 +18,13 @@ class AuthRepositoryImpl implements AuthRepository {
         email: email,
         password: password,
       );
-      return right(user);
+      if (!await networkInfo.isConnected) {
+        return left(
+          Failure("No internet connection"),
+        );
+      } else {
+        return right(user);
+      }
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
@@ -36,7 +44,13 @@ class AuthRepositoryImpl implements AuthRepository {
         mobile: mobile,
         password: password,
       );
-      return right(user);
+      if (!await networkInfo.isConnected) {
+        return left(
+          Failure("No internet connection"),
+        );
+      } else {
+        return right(user);
+      }
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
@@ -49,7 +63,13 @@ class AuthRepositoryImpl implements AuthRepository {
       if (user == null) {
         return left(Failure("User is not logged in"));
       }
-      return right(user);
+      if (!await networkInfo.isConnected) {
+        return left(
+          Failure("No internet connection"),
+        );
+      } else {
+        return right(user);
+      }
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }
@@ -59,7 +79,13 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<Failure, void>> logoutUser() async {
     try {
       await authRemoteDataSource.logout();
-      return right(null);
+      if (!await networkInfo.isConnected) {
+        return left(
+          Failure("No internet connection"),
+        );
+      } else {
+        return right(null);
+      }
     } on ServerException catch (e) {
       return left(Failure(e.message));
     }

@@ -1,5 +1,5 @@
 import 'package:chat_app/core/utils/failure.dart';
-import 'package:chat_app/domain/entities/user.dart';
+import 'package:chat_app/domain/auth/entities/user.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class AuthRepository {

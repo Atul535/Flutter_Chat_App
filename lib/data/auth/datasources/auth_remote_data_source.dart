@@ -1,5 +1,5 @@
 import 'package:chat_app/core/utils/exception.dart';
-import 'package:chat_app/data/model/user_model.dart';
+import 'package:chat_app/data/auth/model/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

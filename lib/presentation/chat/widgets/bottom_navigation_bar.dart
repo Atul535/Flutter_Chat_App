@@ -1,4 +1,6 @@
 import 'package:chat_app/core/theme/colors.dart';
+import 'package:chat_app/services/routing/app_router.dart';
+import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 
 class CustomBottomNavigationBar extends StatefulWidget {
@@ -27,13 +29,21 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
       type: BottomNavigationBarType.fixed,
       selectedLabelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
       unselectedLabelStyle: TextStyle(fontSize: 12),
-      items: const <BottomNavigationBarItem>[
+      items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: Icon(Icons.chat_bubble_outline),
+          icon: IconButton(
+            onPressed: () {
+              appRouter.go(RouteNames.home);
+            },
+            icon: Icon(Icons.chat_bubble_outline),
+          ),
           label: 'Message',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.notifications_none),
+          icon: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.notifications_none),
+          ),
           label: 'Notifications',
         ),
         BottomNavigationBarItem(
@@ -45,12 +55,20 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.call),
+          icon: IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.call),
+          ),
           label: 'Calls',
         ),
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.people_sharp,
+          icon: IconButton(
+            onPressed: () {
+              appRouter.go(RouteNames.contact);
+            },
+            icon: Icon(
+              Icons.people_sharp,
+            ),
           ),
           label: 'Contacts',
         ),
