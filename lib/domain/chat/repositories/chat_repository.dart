@@ -9,5 +9,4 @@ abstract interface class ChatRepository {
     required String senderId,
     required String receiverId,
   });
-  // Future<void> deleteMessage(int messageId);
 }

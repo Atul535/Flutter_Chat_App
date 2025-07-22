@@ -21,7 +21,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String receiverId,
   }) {
     return supabaseClient
-        .from('messages2') // Changed to consistent name
+        .from('messages2')
         .stream(primaryKey: ['id'])
         .order('timestamp')
         .map((rows) => rows
@@ -32,43 +32,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
             .toList());
   }
 
-  // @override
-  // Future<void> sendMessage(ChatModel message) async {
-  //   final user = supabaseClient.auth.currentUser;
-  //   debugPrint('🔐 currentUser: $user');
-  //   if (user == null) throw Exception('User not authenticated');
-  //   if (message.senderId != user.id) throw Exception('Sender ID mismatch');
-
-  //   final payload = {
-  //     'id': message.id,
-  //     'sender_id': message.senderId,
-  //     'receiver_id': message.receiverId,
-  //     'message': message.message,
-  //     'timestamp': message.timestamp.toUtc().toIso8601String(),
-  //   };
-
-  //   debugPrint('→ Inserting payload: $payload');
-
-  //   try {
-  //     final response = await supabaseClient
-  //         .from('messages2') // Changed to consistent name
-  //         .insert(payload)
-  //         .select();
-
-  //     debugPrint('✅ Insert successful: $response');
-  //   } on PostgrestException catch (e) {
-  //     debugPrint('❌ Supabase error: ${e.message}');
-  //     throw Exception('Insert failed: ${e.message}');
-  //   } catch (e) {
-  //     debugPrint('❌ Unexpected error: $e');
-  //     rethrow;
-  //   }
-  // }
-
   @override
   Future<void> sendMessage(ChatModel message) async {
-    final supabase = Supabase.instance.client;
-    final currentUser = supabase.auth.currentUser;
+    final currentUser = supabaseClient.auth.currentUser;
 
     if (currentUser == null) {
       throw Exception("User not authenticated");
@@ -84,7 +50,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
     debugPrint("📦 Sending message payload: $payload");
 
-    final res = await supabase.from('messages2').insert(payload);
+    final res = await supabaseClient.from('messages2').insert(payload);
 
     if (res.error != null) {
       debugPrint("❌ Supabase insert error: ${res.error!.message}");

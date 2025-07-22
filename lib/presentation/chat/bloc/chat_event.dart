@@ -21,8 +21,8 @@ final class LoadMessagesEvent extends ChatEvent {
   });
 }
 
-final class _InternalMessageReceived extends ChatEvent {
-  final List<ChatModel> messages;
+// final class _InternalMessageReceived extends ChatEvent {
+//   final List<ChatModel> messages;
 
-  _InternalMessageReceived(this.messages);
-}
+//   _InternalMessageReceived(this.messages);
+// }
