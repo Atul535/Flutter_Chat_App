@@ -3,35 +3,33 @@ import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 
-class ChatList extends StatelessWidget {
-  const ChatList({
-    super.key,
-  });
+class ContactList extends StatelessWidget {
+  const ContactList({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
+      itemCount: 5,
       itemBuilder: (context, index) => Container(
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         decoration: BoxDecoration(
           color: AppPallete.tileColor,
-          border: Border.all(color: AppPallete.greyColor, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.5),
+              blurRadius: 5,
+              offset: const Offset(0, 2),
+            ),
+          ],
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
           tileColor: AppPallete.tileColor,
           onTap: () {
-            appRouter.goNamed(
-              RouteNames.message,
-              pathParameters: {
-                'senderId': 'user$index',
-                'receiverId': 'user${index + 1}'
-              },
-            );
+            appRouter.go(RouteNames.message);
           },
           leading: CircleAvatar(
-            radius: 25,
+            radius: 22,
             backgroundColor: AppPallete.greyColor.withOpacity(0.5),
             child: Icon(
               Icons.person,
@@ -43,14 +41,6 @@ class ChatList extends StatelessWidget {
             'User $index',
             style: TextStyle(
                 color: AppPallete.whiteColor, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            'message $index',
-            style: TextStyle(color: AppPallete.whiteColor),
-          ),
-          trailing: Text(
-            '$index:0${index + 1}',
-            style: TextStyle(color: AppPallete.greyColor),
           ),
         ),
       ),

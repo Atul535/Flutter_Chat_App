@@ -2,26 +2,36 @@ import 'package:chat_app/core/network/network_info.dart';
 import 'package:chat_app/core/supabase_url/app_secrets.dart';
 import 'package:chat_app/data/auth/datasources/auth_remote_data_source.dart';
 import 'package:chat_app/data/auth/repositories/auth_repository_impl.dart';
+import 'package:chat_app/data/chat/datasource/chat_remote_data_source_impl.dart';
+import 'package:chat_app/data/chat/repositories/chat_repository_impl.dart';
 import 'package:chat_app/domain/auth/repositories/auth_repository.dart';
 import 'package:chat_app/domain/auth/usecases/current_user.dart';
 import 'package:chat_app/domain/auth/usecases/logout_user.dart';
 import 'package:chat_app/domain/auth/usecases/user_login.dart';
 import 'package:chat_app/domain/auth/usecases/user_sign_up.dart';
+import 'package:chat_app/domain/chat/repositories/chat_repository.dart';
+import 'package:chat_app/domain/chat/usecases/get_message.dart';
+import 'package:chat_app/domain/chat/usecases/send_message.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependency() async {
-  _initAuth();
   final supabase = await Supabase.initialize(
     url: AppSecrets.supabaseUrl,
     anonKey: AppSecrets.supabaseAnnonKey,
   );
   serviceLocator.registerLazySingleton(() => supabase.client);
+  serviceLocator.registerLazySingleton<Connectivity>(() => Connectivity());
   serviceLocator.registerLazySingleton<NetworkInfo>(
       () => NetworkInfoImpl(serviceLocator()));
+
+  _initAuth();
+  _initChat();
 }
 
 void _initAuth() {
@@ -39,5 +49,21 @@ void _initAuth() {
           userLogin: serviceLocator(),
           currentUser: serviceLocator(),
           logoutUser: serviceLocator(),
+        ));
+}
+
+void _initChat() {
+  serviceLocator
+    ..registerFactory<ChatRemoteDataSource>(
+        () => ChatRemoteDataSourceImpl(serviceLocator<SupabaseClient>()))
+    ..registerFactory<ChatRepository>(
+        () => ChatRepositoryImpl(serviceLocator<ChatRemoteDataSource>()))
+    ..registerFactory<GetMessage>(
+        () => GetMessage(serviceLocator<ChatRepository>()))
+    ..registerFactory<SendMessage>(
+        () => SendMessage(serviceLocator<ChatRepository>()))
+    ..registerFactory<ChatBloc>(() => ChatBloc(
+          getMessage: serviceLocator<GetMessage>(),
+          sendMessage: serviceLocator<SendMessage>(),
         ));
 }

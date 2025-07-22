@@ -1,6 +1,7 @@
 import 'package:chat_app/core/theme/theme.dart';
 import 'package:chat_app/di/init_dependency.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
+import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,9 @@ Future<void> main() async {
       providers: [
         BlocProvider(
           create: (_) => serviceLocator<AuthBloc>()..add(AuthCurrentUser()),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<ChatBloc>(),
         ),
       ],
       child: const MyApp(),
