@@ -76,19 +76,17 @@ class _MsgInputBoxState extends State<MsgInputBox> {
                   Icons.attach_file,
                   size: 28,
                 )),
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                style: TextStyle(fontSize: 14),
-                decoration: InputDecoration(
-                    fillColor: AppPallete.backgroundColor2,
-                    filled: true,
-                    hintText: 'Type a message',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
-              ),
+            TextField(
+              controller: _controller,
+              style: TextStyle(fontSize: 14),
+              decoration: InputDecoration(
+                  fillColor: AppPallete.backgroundColor2,
+                  filled: true,
+                  hintText: 'Type a message',
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20),
+                      borderSide: BorderSide.none),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
             ),
             const SizedBox(width: 5),
             GestureDetector(

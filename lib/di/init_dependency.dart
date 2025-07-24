@@ -3,17 +3,23 @@ import 'package:chat_app/core/supabase_url/app_secrets.dart';
 import 'package:chat_app/data/auth/datasources/auth_remote_data_source.dart';
 import 'package:chat_app/data/auth/repositories/auth_repository_impl.dart';
 import 'package:chat_app/data/chat/datasource/chat_remote_data_source_impl.dart';
+import 'package:chat_app/data/chat/datasource/contact_remote_data_source_impl.dart';
 import 'package:chat_app/data/chat/repositories/chat_repository_impl.dart';
+import 'package:chat_app/data/chat/repositories/contact_repository_impl.dart';
 import 'package:chat_app/domain/auth/repositories/auth_repository.dart';
 import 'package:chat_app/domain/auth/usecases/current_user.dart';
 import 'package:chat_app/domain/auth/usecases/logout_user.dart';
 import 'package:chat_app/domain/auth/usecases/user_login.dart';
 import 'package:chat_app/domain/auth/usecases/user_sign_up.dart';
 import 'package:chat_app/domain/chat/repositories/chat_repository.dart';
+import 'package:chat_app/domain/chat/repositories/contact_repository.dart';
+import 'package:chat_app/domain/chat/usecases/add_contact.dart';
+import 'package:chat_app/domain/chat/usecases/get_contacts.dart';
 import 'package:chat_app/domain/chat/usecases/get_message.dart';
 import 'package:chat_app/domain/chat/usecases/send_message.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
+import 'package:chat_app/presentation/chat/contact/bloc/contact_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,6 +38,7 @@ Future<void> initDependency() async {
 
   _initAuth();
   _initChat();
+  _initContact();
 }
 
 void _initAuth() {
@@ -65,5 +72,19 @@ void _initChat() {
     ..registerFactory<ChatBloc>(() => ChatBloc(
           getMessage: serviceLocator<GetMessage>(),
           sendMessage: serviceLocator<SendMessage>(),
+        ));
+}
+
+void _initContact() {
+  serviceLocator
+    ..registerFactory<ContactRemoteDataSource>(
+        () => ContactRemoteDataSourceImpl(serviceLocator<SupabaseClient>()))
+    ..registerFactory<ContactRepository>(
+        () => ContactRepositoryImpl(serviceLocator<ContactRemoteDataSource>()))
+    ..registerFactory<AddContact>(() => AddContact(serviceLocator()))
+    ..registerFactory<GetContacts>(() => GetContacts(serviceLocator()))
+    ..registerFactory<ContactBloc>(() => ContactBloc(
+          serviceLocator<GetContacts>(),
+          serviceLocator<AddContact>(),
         ));
 }

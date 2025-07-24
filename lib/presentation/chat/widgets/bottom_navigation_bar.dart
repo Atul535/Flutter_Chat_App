@@ -47,9 +47,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
           label: 'Notifications',
         ),
         BottomNavigationBarItem(
-          icon: Icon(
-            Icons.add_circle_outlined,
-            size: 50,
+          icon: IconButton(
+            onPressed: () {
+              appRouter.go(RouteNames.addcontact);
+            },
+            icon: Icon(
+              Icons.add_circle_outlined,
+              size: 50,
+            ),
             color: AppPallete.primaryColor,
           ),
           label: '',

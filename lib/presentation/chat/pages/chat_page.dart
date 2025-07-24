@@ -44,9 +44,7 @@ class ChatPage extends StatelessWidget {
           ],
         ),
         bottomNavigationBar: CustomBottomNavigationBar(),
-        body: Expanded(
-          child: ChatList(),
-        ),
+        body: ChatList(),
       ),
     );
   }

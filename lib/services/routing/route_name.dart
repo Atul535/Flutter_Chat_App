@@ -5,4 +5,5 @@ class RouteNames {
   static const String message = '/message';
   static const String profile = '/profile';
   static const String contact = '/contact';
+  static const String addcontact = '/addcontact';
 }
