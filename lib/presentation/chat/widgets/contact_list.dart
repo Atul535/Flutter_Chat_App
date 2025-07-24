@@ -3,6 +3,7 @@ import 'package:chat_app/domain/chat/entities/contact_entity.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ContactList extends StatelessWidget {
   final List<ContactEntity> contacts;
@@ -13,6 +14,8 @@ class ContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = Supabase.instance.client.auth.currentUser;
+    final myId = currentUser?.id;
     return ListView.builder(
         itemCount: contacts.length,
         itemBuilder: (context, index) {
@@ -32,11 +35,18 @@ class ContactList extends StatelessWidget {
             ),
             child: ListTile(
               tileColor: AppPallete.tileColor,
-              onTap: () {
-                appRouter.goNamed(
-                  RouteNames.message,
-                );
-              },
+              onTap: myId == null
+                  ? null
+                  : () {
+                      appRouter.goNamed(
+                        RouteNames.message,
+                        pathParameters: {
+                          'senderId': myId,
+                          'receiverId': contact.id,
+                        },
+                        extra: contact,
+                      );
+                    },
               leading: CircleAvatar(
                 radius: 22,
                 backgroundColor: AppPallete.greyColor.withOpacity(0.5),

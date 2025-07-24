@@ -1,5 +1,6 @@
 // services/routing/app_router.dart
 
+import 'package:chat_app/domain/chat/entities/contact_entity.dart';
 import 'package:chat_app/presentation/auth/pages/login_page.dart';
 import 'package:chat_app/presentation/auth/pages/signup_page.dart';
 import 'package:chat_app/presentation/chat/contact/pages/add_contact_page.dart';
@@ -31,7 +32,12 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) {
         final senderId = state.pathParameters['senderId']!;
         final receiverId = state.pathParameters['receiverId']!;
-        return MessagePage(senderId: senderId, receiverId: receiverId);
+        final contact = state.extra as ContactEntity;
+        return MessagePage(
+          senderId: senderId,
+          receiverId: receiverId,
+          receiverName: contact.name,  
+        );
       },
     ),
     GoRoute(

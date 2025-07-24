@@ -4,8 +4,12 @@ import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 
 class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final String name;
+  final String status;
   const MessageAppBar({
     super.key,
+    required this.name,
+    this.status = 'online',
   });
 
   @override
@@ -20,7 +24,6 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       titleSpacing: 2,
       title: Row(
-        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           CircleAvatar(
             radius: 20,
@@ -36,11 +39,11 @@ class MessageAppBar extends StatelessWidget implements PreferredSizeWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'User 1',
+                name,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
               ),
               Text(
-                'online',
+                status,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 13,

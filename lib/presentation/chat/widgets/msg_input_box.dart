@@ -28,7 +28,7 @@ class _MsgInputBoxState extends State<MsgInputBox> {
     if (text.isEmpty) return;
 
     // Get current authenticated user
-    final currentUser = Supabase.instance.client.auth.currentUser;
+    final currentUser = supabase.auth.currentUser;
 
     if (currentUser == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -76,17 +76,19 @@ class _MsgInputBoxState extends State<MsgInputBox> {
                   Icons.attach_file,
                   size: 28,
                 )),
-            TextField(
-              controller: _controller,
-              style: TextStyle(fontSize: 14),
-              decoration: InputDecoration(
-                  fillColor: AppPallete.backgroundColor2,
-                  filled: true,
-                  hintText: 'Type a message',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide.none),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
+            Expanded(
+              child: TextField(
+                controller: _controller,
+                style: TextStyle(fontSize: 14),
+                decoration: InputDecoration(
+                    fillColor: AppPallete.backgroundColor2,
+                    filled: true,
+                    hintText: 'Type a message',
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(20),
+                        borderSide: BorderSide.none),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
+              ),
             ),
             const SizedBox(width: 5),
             GestureDetector(
