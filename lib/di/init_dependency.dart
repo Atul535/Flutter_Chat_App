@@ -15,6 +15,7 @@ import 'package:chat_app/domain/chat/repositories/chat_repository.dart';
 import 'package:chat_app/domain/chat/repositories/contact_repository.dart';
 import 'package:chat_app/domain/chat/usecases/add_contact.dart';
 import 'package:chat_app/domain/chat/usecases/get_contacts.dart';
+import 'package:chat_app/domain/chat/usecases/get_conversation_previews.dart';
 import 'package:chat_app/domain/chat/usecases/get_message.dart';
 import 'package:chat_app/domain/chat/usecases/send_message.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
@@ -51,6 +52,8 @@ void _initAuth() {
     ..registerFactory<UserLogin>(() => UserLogin(serviceLocator()))
     ..registerFactory<CurrentUser>(() => CurrentUser(serviceLocator()))
     ..registerFactory<LogoutUser>(() => LogoutUser(serviceLocator()))
+    ..registerFactory<GetConversationPreviews>(
+        () => GetConversationPreviews(serviceLocator()))
     ..registerFactory<AuthBloc>(() => AuthBloc(
           userSignUp: serviceLocator(),
           userLogin: serviceLocator(),
@@ -72,6 +75,7 @@ void _initChat() {
     ..registerFactory<ChatBloc>(() => ChatBloc(
           getMessage: serviceLocator<GetMessage>(),
           sendMessage: serviceLocator<SendMessage>(),
+          getConversationPreviews: serviceLocator<GetConversationPreviews>(),
         ));
 }
 

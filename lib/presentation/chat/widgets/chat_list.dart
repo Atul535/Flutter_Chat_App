@@ -1,59 +1,65 @@
 import 'package:chat_app/core/theme/colors.dart';
+import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 
 class ChatList extends StatelessWidget {
+  final List<ConversationPreview> conversations;
   const ChatList({
     super.key,
+    required this.conversations,
   });
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: 10,
-      itemBuilder: (context, index) => Container(
-        margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        decoration: BoxDecoration(
-          color: AppPallete.tileColor,
-          border: Border.all(color: AppPallete.greyColor, width: 1),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          tileColor: AppPallete.tileColor,
-          onTap: () {
-            appRouter.goNamed(
-              RouteNames.message,
-              pathParameters: {
-                'senderId': 'user$index',
-                'receiverId': 'user${index + 1}'
-              },
-            );
-          },
-          leading: CircleAvatar(
-            radius: 25,
-            backgroundColor: AppPallete.greyColor.withOpacity(0.5),
-            child: Icon(
-              Icons.person,
-              size: 30,
-              color: Colors.white,
+      itemCount: conversations.length,
+      itemBuilder: (context, index) {
+        final conversation = conversations[index];
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          decoration: BoxDecoration(
+            color: AppPallete.tileColor,
+            border: Border.all(color: AppPallete.greyColor, width: 1),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: ListTile(
+            tileColor: AppPallete.tileColor,
+            onTap: () {
+              appRouter.goNamed(
+                RouteNames.message,
+                pathParameters: {
+                  'senderId': conversation.currentUserId,
+                  'receiverId': conversation.contactId,
+                },
+              );
+            },
+            leading: CircleAvatar(
+              radius: 25,
+              backgroundColor: AppPallete.greyColor.withOpacity(0.5),
+              child: Icon(
+                Icons.person,
+                size: 30,
+                color: Colors.white,
+              ),
+            ),
+            title: Text(
+              conversation.contactName,
+              style: TextStyle(
+                  color: AppPallete.whiteColor, fontWeight: FontWeight.bold),
+            ),
+            subtitle: Text(
+              conversation.lastMessage,
+              style: TextStyle(color: AppPallete.whiteColor),
+            ),
+            trailing: Text(
+              conversation.lastMessageTime,
+              style: TextStyle(color: AppPallete.greyColor),
             ),
           ),
-          title: Text(
-            'User $index',
-            style: TextStyle(
-                color: AppPallete.whiteColor, fontWeight: FontWeight.bold),
-          ),
-          subtitle: Text(
-            'message $index',
-            style: TextStyle(color: AppPallete.whiteColor),
-          ),
-          trailing: Text(
-            '$index:0${index + 1}',
-            style: TextStyle(color: AppPallete.greyColor),
-          ),
-        ),
-      ),
+        );
+      },
       shrinkWrap: true,
     );
   }

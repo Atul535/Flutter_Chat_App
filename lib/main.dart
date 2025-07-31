@@ -23,7 +23,7 @@ Future<void> main() async {
           create: (_) => serviceLocator<ContactBloc>(),
         ),
       ],
-      child: const MyApp(),
+      child: const MyApp(),  
     ),
   );
 }

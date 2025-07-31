@@ -1,12 +1,21 @@
 class ConversationPreview {
-  final String partnerId;
-  final String partnerName;
+  // final String conversationId;
+  final String contactId;
+  final String contactName;
+  final String contactEmail;
+  final String? avatarUrl;
   final String lastMessage;
-  final DateTime timestamp;
+  final String lastMessageTime;
+  final String currentUserId;
+
   ConversationPreview({
-    required this.partnerId,
-    required this.partnerName,
+    // required this.conversationId,
+    required this.contactId,
+    required this.contactName,
+    required this.contactEmail,
     required this.lastMessage,
-    required this.timestamp,
+    required this.lastMessageTime,
+    this.avatarUrl,
+    required this.currentUserId,
   });
 }

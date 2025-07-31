@@ -13,12 +13,12 @@ class ContactRemoteDataSourceImpl implements ContactRemoteDataSource {
 
   @override
   Future<List<ContactModel>> getContacts() async {
-    final response = await client.from('contacts').select();
+    final response = await client.from('contact').select();
     return (response as List).map((e) => ContactModel.fromJson(e)).toList();
   }
 
   @override
   Future<void> addContact(ContactModel contact) async {
-    await client.from('contacts').insert(contact.toJson());
+    await client.from('contact').insert(contact.toJson());
   }
 }

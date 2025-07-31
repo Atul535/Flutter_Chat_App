@@ -4,6 +4,7 @@ import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddContactPage extends StatefulWidget {
   const AddContactPage({super.key});
@@ -73,8 +74,13 @@ class _AddContactPageState extends State<AddContactPage> {
                         return;
                       }
                       context.read<ContactBloc>().add(
-                        AddContactEvent(name: name, email: email),
-                      );
+                            AddContactEvent(
+                              name: name,
+                              email: email,
+                              userId:
+                                  Supabase.instance.client.auth.currentUser!.id,
+                            ),
+                          );
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppPallete.primaryColor,

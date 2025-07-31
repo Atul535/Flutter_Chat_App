@@ -6,7 +6,8 @@ import 'package:fpdart/fpdart.dart';
 class GetMessage {
   final ChatRepository chatRepository;
   GetMessage(this.chatRepository);
-  Future<Either<Failure, Stream<List<ChatModel>>>>  call(GetMessageParams params) async {
+  Future<Either<Failure, Stream<List<ChatModel>>>> call(
+      GetMessageParams params) async {
     return await chatRepository.getMessage(
       senderId: params.senderId,
       receiverId: params.receiverId,

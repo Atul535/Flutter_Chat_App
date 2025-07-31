@@ -37,9 +37,9 @@ class _MsgInputBoxState extends State<MsgInputBox> {
       return;
     }
 
-    print('Sender ID: ${currentUser.id}, '
-        'Receiver ID: ${currentUser.id}, '
-        'Message: $text');
+    // print('Sender ID: ${currentUser.id}, '
+    //     'Receiver ID: ${currentUser.id}, '
+    //     'Message: $text');
 
     final message = ChatModel(
       id: const Uuid().v4(),

@@ -1,4 +1,5 @@
 import 'package:chat_app/data/chat/model/chat_model.dart';
+import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -9,6 +10,8 @@ abstract interface class ChatRemoteDataSource {
   });
 
   Future<void> sendMessage(ChatModel message);
+
+  Future<List<ConversationPreview>> getConversationPreviews();
 }
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -58,5 +61,28 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     }
 
     debugPrint("✅ Message inserted successfully");
+  }
+
+  @override
+  Future<List<ConversationPreview>> getConversationPreviews() async {
+    final currentUser = supabaseClient.auth.currentUser;
+
+    if (currentUser == null) {
+      throw Exception("User not authenticated");
+    }
+    final response =
+        await supabaseClient.from('conversation_previews').select();
+
+    return (response as List)
+        .map((e) => ConversationPreview(
+              contactId: e['contact_id'] ?? '',
+              contactName: e['contact_name'] ?? '',
+              contactEmail: e['contact_email'] ?? '',
+              lastMessage: e['last_message'] ?? '',
+              lastMessageTime: e['last_message_time'] ?? '',
+              avatarUrl: e['avatar_url'] ?? '',
+              currentUserId: currentUser.id,
+            ))
+        .toList();
   }
 }

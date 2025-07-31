@@ -37,6 +37,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         id: const Uuid().v4(),
         name: event.name,
         email: event.email,
+        userId: event.userId,
       );
 
       await addContact(newContact);

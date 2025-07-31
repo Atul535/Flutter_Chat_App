@@ -75,6 +75,17 @@ class _ContactPageState extends State<ContactPage> {
                 child: Loader(),
               );
             } else if (state is ContactLoaded) {
+              if (state.contacts.isEmpty) {
+                return Center(
+                  child: Text(
+                    'No contacts found',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: AppPallete.greyColor,
+                        fontWeight: FontWeight.bold),
+                  ),
+                );
+              }
               return ContactList(contacts: state.contacts);
             } else if (state is ContactError) {
               return Center(

@@ -5,6 +5,7 @@ class ContactModel extends ContactEntity {
     required super.id,
     required super.name,
     required super.email,
+    required super.userId,
   });
 
   factory ContactModel.fromJson(Map<String, dynamic> json) {
@@ -12,6 +13,7 @@ class ContactModel extends ContactEntity {
       id: json['id'] ?? '',
       name: json['name'] ?? '',
       email: json['email'] ?? '',
+      userId: json['user_id'] ?? '',
     );
   }
 
@@ -20,6 +22,7 @@ class ContactModel extends ContactEntity {
       'id': id,
       'name': name,
       'email': email,
+      'user_id': userId,
     };
   }
 
@@ -28,6 +31,7 @@ class ContactModel extends ContactEntity {
       id: entity.id,
       name: entity.name,
       email: entity.email,
+      userId: entity.userId,
     );
   }
 }

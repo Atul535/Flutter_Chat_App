@@ -10,6 +10,8 @@ class LoadContactsEvent extends ContactEvent {
 class AddContactEvent extends ContactEvent {
   final String name;
   final String email;
+  final String userId;
 
-  AddContactEvent({required this.email, required this.name});
+  AddContactEvent(
+      {required this.userId, required this.email, required this.name});
 }
