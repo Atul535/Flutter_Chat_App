@@ -24,9 +24,9 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     required String receiverId,
   }) {
     return supabaseClient
-        .from('messages2')
+        .from('messages')
         .stream(primaryKey: ['id'])
-        .order('timestamp')
+        .order('created_at')
         .map((rows) => rows
             .map((e) => ChatModel.fromJson(e))
             .where((msg) =>
@@ -48,12 +48,12 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       'sender_id': currentUser.id,
       'receiver_id': message.receiverId,
       'message': message.message,
-      'timestamp': message.timestamp.toUtc().toIso8601String(),
+      'created_at': message.timestamp.toUtc().toIso8601String(),
     };
 
     debugPrint("📦 Sending message payload: $payload");
 
-    final res = await supabaseClient.from('messages2').insert(payload);
+    final res = await supabaseClient.from('messages').insert(payload);
 
     if (res.error != null) {
       debugPrint("❌ Supabase insert error: ${res.error!.message}");

@@ -15,7 +15,7 @@ class ChatModel extends MessageEntity {
       senderId: map['senderId'] ?? '',
       receiverId: map['receiverId'] ?? '',
       message: map['message'] ?? '',
-      timestamp: DateTime.parse(map['timestamp'] ?? ''),
+      timestamp: DateTime.parse(map['created_at'] ?? ''),
     );
   }
   Map<String, dynamic> toJson() {
@@ -24,7 +24,7 @@ class ChatModel extends MessageEntity {
       'senderId': senderId,
       'receiverId': receiverId,
       'message': message,
-      'timestamp': timestamp.toUtc().toIso8601String(),
+      'created_at': timestamp.toUtc().toIso8601String(),
     };
   }
 }

@@ -27,8 +27,8 @@ class MessagePage extends StatelessWidget {
         ),
         body: StreamBuilder<List<Map<String, dynamic>>>(
           stream: supabase
-              .from('messages2')
-              .stream(primaryKey: ['id']).order('timestamp'),
+              .from('messages')
+              .stream(primaryKey: ['id']).order('created_at'),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -40,8 +40,8 @@ class MessagePage extends StatelessWidget {
 
             final messages = snapshot.data!;
 
-            messages.sort((a, b) => DateTime.parse(a['timestamp'])
-                .compareTo(DateTime.parse(b['timestamp'])));
+            messages.sort((a, b) => DateTime.parse(a['created_at'])
+                .compareTo(DateTime.parse(b['created_at'])));
 
             return ListView.builder(
               padding: const EdgeInsets.only(bottom: 80, top: 10),

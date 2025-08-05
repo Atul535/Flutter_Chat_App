@@ -17,6 +17,7 @@ class AddContactPage extends StatefulWidget {
 class _AddContactPageState extends State<AddContactPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +63,16 @@ class _AddContactPageState extends State<AddContactPage> {
                     decoration: const InputDecoration(labelText: 'Email'),
                   ),
                   const SizedBox(height: 20),
+                  TextField(
+                    controller: _phoneController,
+                    decoration: const InputDecoration(labelText: 'Mobile no.'),
+                  ),
+                  const SizedBox(height: 20),
                   ElevatedButton(
                     onPressed: () {
                       final name = _nameController.text.trim();
                       final email = _emailController.text.trim();
+                      final phone = _phoneController.text.trim();
                       if (name.isEmpty || email.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -77,6 +84,7 @@ class _AddContactPageState extends State<AddContactPage> {
                             AddContactEvent(
                               name: name,
                               email: email,
+                              phone: phone,
                               userId:
                                   Supabase.instance.client.auth.currentUser!.id,
                             ),
