@@ -44,8 +44,7 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     try {
       final result = await _getMessage(
         GetMessageParams(
-          senderId: event.senderId,
-          receiverId: event.receiverId,
+          conversationId: event.conversationId,
         ),
       );
       result.fold(
@@ -67,15 +66,23 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
     SendMessageEvent event,
     Emitter<ChatState> emit,
   ) async {
+    debugPrint("🔍 ChatBloc _onSendMessage called");
+    debugPrint("🔍 Message content: ${event.content}");
+    debugPrint("🔍 Other user ID: ${event.otherUserId}");
     try {
-      await _sendMessage(event.message);
+      await _sendMessage(SendMessageParams(
+        content: event.content,
+        otherUserId: event.otherUserId,
+      ));
+      debugPrint("✅ Message sent successfully");
       emit(MessageSent());
     } catch (e) {
+      debugPrint("❌ Failed to send message in BLoC: $e");
       emit(ChatError('Failed to send message: $e'));
     }
   }
 
-  Future<void> _onLoadConversationPreviews(  
+  Future<void> _onLoadConversationPreviews(
     GetConversationPreviewsEvent event,
     Emitter<ChatState> emit,
   ) async {

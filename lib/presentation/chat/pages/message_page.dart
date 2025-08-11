@@ -1,3 +1,4 @@
+import 'package:chat_app/core/utils/loader.dart';
 import 'package:chat_app/presentation/chat/widgets/message_app_bar.dart';
 import 'package:chat_app/presentation/chat/widgets/msg_input_box.dart';
 import 'package:flutter/material.dart';
@@ -7,18 +8,19 @@ class MessagePage extends StatelessWidget {
   final String senderId;
   final String receiverId;
   final String receiverName;
+  final String conversationId;
 
   const MessagePage({
     super.key,
     required this.senderId,
     required this.receiverId,
     required this.receiverName,
+    required this.conversationId,
   });
 
   @override
   Widget build(BuildContext context) {
     final supabase = Supabase.instance.client;
-
     return SafeArea(
       child: Scaffold(
         appBar: MessageAppBar(
@@ -26,22 +28,34 @@ class MessagePage extends StatelessWidget {
           status: 'online',
         ),
         body: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: supabase
-              .from('messages')
-              .stream(primaryKey: ['id']).order('created_at'),
+          stream: supabase.from('messages').stream(primaryKey: ['id'])
+              .eq('conversation_id', conversationId)
+              .order('created_at'),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
 
             if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: Loader());
             }
 
             final messages = snapshot.data!;
 
-            messages.sort((a, b) => DateTime.parse(a['created_at'])
-                .compareTo(DateTime.parse(b['created_at'])));
+            messages.sort((a, b) {
+              DateTime ta, tb;
+              try {
+                ta = DateTime.parse(a['created_at']?.toString() ?? '');
+              } catch (_) {
+                ta = DateTime.fromMillisecondsSinceEpoch(0);
+              }
+              try {
+                tb = DateTime.parse(b['created_at']?.toString() ?? '');
+              } catch (_) {
+                tb = DateTime.fromMillisecondsSinceEpoch(0);
+              }
+              return ta.compareTo(tb);
+            });
 
             return ListView.builder(
               padding: const EdgeInsets.only(bottom: 80, top: 10),
@@ -49,6 +63,7 @@ class MessagePage extends StatelessWidget {
               itemBuilder: (context, index) {
                 final msg = messages[index];
                 final isMe = msg['sender_id'] == senderId;
+
                 return Align(
                   alignment:
                       isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -61,7 +76,7 @@ class MessagePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      msg['message'],
+                      (msg['content'] ?? msg['message'] ?? '').toString(),
                       style: TextStyle(
                         color: isMe ? Colors.white : Colors.black,
                         fontSize: 16,
@@ -75,7 +90,6 @@ class MessagePage extends StatelessWidget {
         ),
         bottomNavigationBar: MsgInputBox(
           receiverId: receiverId,
-          senderId: senderId,
         ),
       ),
     );

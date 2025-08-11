@@ -18,7 +18,7 @@ class ChatList extends StatelessWidget {
       itemBuilder: (context, index) {
         final conversation = conversations[index];
         return Container(
-          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+          margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           decoration: BoxDecoration(
             color: AppPallete.tileColor,
             border: Border.all(color: AppPallete.greyColor, width: 1),
@@ -32,6 +32,7 @@ class ChatList extends StatelessWidget {
                 pathParameters: {
                   'senderId': conversation.currentUserId,
                   'receiverId': conversation.contactId,
+                  // 'conversationId': conversation.conversationId,
                 },
               );
             },

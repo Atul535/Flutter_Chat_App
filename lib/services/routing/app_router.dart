@@ -8,6 +8,7 @@ import 'package:chat_app/presentation/chat/pages/chat_page.dart';
 import 'package:chat_app/presentation/chat/contact/pages/contact_page.dart';
 import 'package:chat_app/presentation/chat/pages/message_page.dart';
 import 'package:chat_app/presentation/chat/pages/my_profile.dart';
+import 'package:chat_app/presentation/chat/widgets/msg_input_box.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:go_router/go_router.dart';
 
@@ -28,15 +29,17 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       name: RouteNames.message,
-      path: '/message/:senderId/:receiverId',
+      path: '/message/:senderId/:receiverId:',
       builder: (context, state) {
         final senderId = state.pathParameters['senderId']!;
         final receiverId = state.pathParameters['receiverId']!;
         final contact = state.extra as ContactEntity;
+        final conversationId = generateConversationId(senderId, receiverId);
         return MessagePage(
           senderId: senderId,
           receiverId: receiverId,
-          receiverName: contact.name,  
+          receiverName: contact.name,
+          conversationId: conversationId,
         );
       },
     ),

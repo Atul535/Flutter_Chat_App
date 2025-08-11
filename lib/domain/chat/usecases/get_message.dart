@@ -9,18 +9,15 @@ class GetMessage {
   Future<Either<Failure, Stream<List<ChatModel>>>> call(
       GetMessageParams params) async {
     return await chatRepository.getMessage(
-      senderId: params.senderId,
-      receiverId: params.receiverId,
+      conversationId: params.conversationId,
     );
   }
 }
 
 class GetMessageParams {
-  final String senderId;
-  final String receiverId;
+  final String conversationId;
 
-  GetMessageParams({
-    required this.senderId,
-    required this.receiverId,
+  GetMessageParams({         
+    required this.conversationId,
   });
 }

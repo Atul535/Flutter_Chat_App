@@ -5,11 +5,12 @@ import 'package:chat_app/domain/chat/entities/message_entity.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class ChatRepository {
-  Future<void> sendMessage(MessageEntity message);
+  Future<void> sendMessage({
+    required MessageEntity  content,
+    required String otherUserId,
+  });
   Future<Either<Failure, Stream<List<ChatModel>>>> getMessage({
-    // required String conversationId,
-    required String senderId,
-    required String receiverId,
+    required String conversationId,
   });
   Future<Either<Failure, List<ConversationPreview>>> getConversationPreviews();
 }

@@ -4,20 +4,21 @@ part of 'chat_bloc.dart';
 sealed class ChatEvent {}
 
 final class SendMessageEvent extends ChatEvent {
-  final MessageEntity message;
+  final MessageEntity content;
+  final String
+      otherUserId; // Added to ensure repository can validate participants
 
   SendMessageEvent({
-    required this.message,
+    required this.content,
+    required this.otherUserId,
   });
 }
 
 final class LoadMessagesEvent extends ChatEvent {
-  final String senderId;
-  final String receiverId;
+  final String conversationId;
 
   LoadMessagesEvent({
-    required this.senderId,
-    required this.receiverId,
+    required this.conversationId,
   });
 }
 

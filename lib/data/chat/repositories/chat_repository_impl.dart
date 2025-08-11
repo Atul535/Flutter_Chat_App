@@ -13,15 +13,11 @@ class ChatRepositoryImpl implements ChatRepository {
 
   @override
   Future<Either<Failure, Stream<List<ChatModel>>>> getMessage({
-    required String senderId,
-    required String receiverId,
-    // required String conversationId,
+    required String conversationId,
   }) async {
     try {
       final messages = chatRemoteDataSource.getMessages(
-        // conversationId: conversationId,
-        senderId: senderId,
-        receiverId: receiverId,
+        conversationId: conversationId,
       );
       return Right(messages);
     } catch (e) {
@@ -30,19 +26,29 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Either<Failure, void>> sendMessage(MessageEntity message) async {
-    try {
-      if (message is! ChatModel) {
-        return Left(Failure("Invalid message type"));
-      }
+ @override
+Future<void> sendMessage({
+  required MessageEntity content,
+  required String otherUserId,
+}) async {
+  final chatModel = ChatModel(
+    id: content.id,
+    senderId: content.senderId,
+    receiverId: content.receiverId,
+    conversationId: content.conversationId,
+    content: content.content,
+    timestamp: content.timestamp,
+  );
 
-      await chatRemoteDataSource.sendMessage(message);
-      return Right(null);
-    } catch (e) {
-      return Left(Failure(e.toString()));
-    }
-  }
+  await chatRemoteDataSource.sendMessage(
+    message: chatModel,
+    otherUserId: otherUserId,
+  );
+}
 
+
+
+  @override
   Future<Either<Failure, List<ConversationPreview>>>
       getConversationPreviews() async {
     try {

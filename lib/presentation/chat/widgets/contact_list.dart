@@ -21,7 +21,7 @@ class ContactList extends StatelessWidget {
         itemBuilder: (context, index) {
           final contact = contacts[index];
           return Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(
               color: AppPallete.tileColor,
               boxShadow: [

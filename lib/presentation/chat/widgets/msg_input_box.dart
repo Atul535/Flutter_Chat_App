@@ -6,13 +6,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
+final _uuid = Uuid();
+
+String generateConversationId(String userA, String userB) {
+  final sorted = [userA, userB]..sort();
+  final combined = '${sorted[0]}:${sorted[1]}';
+  return _uuid.v5(Uuid.NAMESPACE_URL, combined);
+}
+
 class MsgInputBox extends StatefulWidget {
   final String receiverId;
-  final String senderId;
+  // final String conversationId;
+
   const MsgInputBox({
     super.key,
     required this.receiverId,
-    required this.senderId,
+    // required this.conversationId,
   });
 
   @override
@@ -25,31 +34,45 @@ class _MsgInputBoxState extends State<MsgInputBox> {
 
   void _sendMessage() {
     final text = _controller.text.trim();
-    if (text.isEmpty) return;
+    debugPrint("🔍 _sendMessage called with text: '$text'");
 
-    // Get current authenticated user
+    if (text.isEmpty) {
+      debugPrint("⚠️ Text is empty, returning early");
+      return;
+    }
+
     final currentUser = supabase.auth.currentUser;
+    debugPrint("🔍 Current user: ${currentUser?.id}");
 
     if (currentUser == null) {
+      debugPrint("❌ No current user");
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('You must be signed in to send messages')),
       );
       return;
     }
 
-    // print('Sender ID: ${currentUser.id}, '
-    //     'Receiver ID: ${currentUser.id}, '
-    //     'Message: $text');
+    final convId = generateConversationId(currentUser.id, widget.receiverId);
+    debugPrint("🔍 Generated conversation ID: $convId");
 
     final message = ChatModel(
       id: const Uuid().v4(),
-      senderId: currentUser.id, // Use real user ID
-      receiverId: currentUser.id,
-      message: text,
+      senderId: currentUser.id,
+      conversationId: convId,
+      content: text,
       timestamp: DateTime.now(),
+      receiverId: widget.receiverId,
     );
 
-    context.read<ChatBloc>().add(SendMessageEvent(message: message));
+    debugPrint("🔍 Created message: ${message.toJson()}");
+    debugPrint("🔍 About to dispatch SendMessageEvent");
+
+    context.read<ChatBloc>().add(SendMessageEvent(
+          content: message,
+          otherUserId: widget.receiverId,
+        ));
+
+    debugPrint("🔍 SendMessageEvent dispatched, clearing text field");
     _controller.clear();
   }
 
@@ -63,31 +86,29 @@ class _MsgInputBoxState extends State<MsgInputBox> {
         child: Row(
           children: [
             IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.camera_alt,
-                  size: 28,
-                )),
+              padding: EdgeInsets.zero,
+              onPressed: () {},
+              icon: const Icon(Icons.camera_alt, size: 28),
+            ),
             IconButton(
-                padding: EdgeInsets.zero,
-                onPressed: () {},
-                icon: Icon(
-                  Icons.attach_file,
-                  size: 28,
-                )),
+              padding: EdgeInsets.zero,
+              onPressed: () {},
+              icon: const Icon(Icons.attach_file, size: 28),
+            ),
             Expanded(
               child: TextField(
                 controller: _controller,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
                 decoration: InputDecoration(
-                    fillColor: AppPallete.backgroundColor2,
-                    filled: true,
-                    hintText: 'Type a message',
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide.none),
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 15)),
+                  fillColor: AppPallete.backgroundColor2,
+                  filled: true,
+                  hintText: 'Type a message',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    borderSide: BorderSide.none,
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 15),
+                ),
               ),
             ),
             const SizedBox(width: 5),
@@ -96,13 +117,10 @@ class _MsgInputBoxState extends State<MsgInputBox> {
               child: CircleAvatar(
                 radius: 25,
                 backgroundColor: AppPallete.gradient4,
-                child: Icon(
-                  Icons.send_rounded,
-                  size: 30,
-                  color: Colors.white,
-                ),
+                child: const Icon(Icons.send_rounded,
+                    size: 30, color: Colors.white),
               ),
-            )
+            ),
           ],
         ),
       ),
