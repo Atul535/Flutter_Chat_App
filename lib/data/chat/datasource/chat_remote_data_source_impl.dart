@@ -206,7 +206,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     final response = await supabaseClient
         .from('conversation_previews')
         .select()
-        .neq('participant_user_id', currentUser.id);
+        .eq('participant_user_id', currentUser.id);
 
     return (response as List)
         .map((e) => ConversationPreview(

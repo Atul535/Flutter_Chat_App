@@ -91,10 +91,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
       final result = await _getConversationPreviews();
       result.fold(
         (failure) {
+          debugPrint("❌ Failed to load previews: ${failure.message}");
           emit(ChatError(
               'Failed to load conversation previews: ${failure.message}'));
         },
         (previews) {
+          debugPrint("✅ Loaded previews: ${previews.length}");
           emit(ConversationPreviewsLoaded(previews));
         },
       );

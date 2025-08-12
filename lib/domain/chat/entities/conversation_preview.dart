@@ -1,5 +1,4 @@
 class ConversationPreview {
-  // final String conversationId;
   final String contactId;
   final String contactName;
   final String contactEmail;
@@ -9,7 +8,6 @@ class ConversationPreview {
   final String currentUserId;
 
   ConversationPreview({
-    // required this.conversationId,
     required this.contactId,
     required this.contactName,
     required this.contactEmail,

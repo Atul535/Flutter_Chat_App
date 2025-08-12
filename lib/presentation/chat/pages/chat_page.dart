@@ -75,6 +75,14 @@ class _ChatPageState extends State<ChatPage> {
             if (state is ChatLoading) {
               return const Center(child: Loader());
             } else if (state is ConversationPreviewsLoaded) {
+              if (state.previews.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No messages yet',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                );
+              }
               return ChatList(conversations: state.previews);
             } else if (state is ChatError) {
               return Center(
@@ -84,7 +92,7 @@ class _ChatPageState extends State<ChatPage> {
                 ),
               );
             }
-            return const Center(child: Text('No messages yet'));
+            return const Center(child: Loader());
           },
         ),
       ),
