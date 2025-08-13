@@ -20,6 +20,23 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     setState(() {
       _selectedIndex = index;
     });
+    switch (index) {
+      case 0:
+        appRouter.go(RouteNames.home);
+        break;
+      case 1:
+        // Handle notifications
+        break;
+      case 2:
+        appRouter.go(RouteNames.addcontact);
+        break;
+      case 3:
+        // Handle calls
+        break;
+      case 4:
+        appRouter.go(RouteNames.contact);
+        break;
+    }
   }
 
   @override
@@ -27,59 +44,51 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return BottomNavigationBar(
       backgroundColor: AppPallete.appBarColor,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+      selectedLabelStyle: TextStyle(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+          color: AppPallete.whiteColor),
       unselectedLabelStyle: TextStyle(fontSize: 12),
+      currentIndex: _selectedIndex,
+      onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              appRouter.go(RouteNames.home);
-            },
-            icon: Icon(Icons.chat_bubble_outline),
+          icon: Icon(
+            Icons.chat_bubble_outline,
+            size: _selectedIndex == 0 ? 30 : 24,
           ),
           label: 'Message',
         ),
         BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.notifications_none),
+          icon: Icon(
+            Icons.notifications_none,
+            size: _selectedIndex == 1 ? 30 : 24,
           ),
           label: 'Notifications',
         ),
         BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              appRouter.go(RouteNames.addcontact);
-            },
-            icon: Icon(
-              Icons.add_circle_outlined,
-              size: 50,
-            ),
+          icon: Icon(
+            Icons.add_circle_outlined,
+            size: 50,
             color: AppPallete.primaryColor,
           ),
           label: '',
         ),
         BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {},
-            icon: Icon(Icons.call),
+          icon: Icon(
+            Icons.call,
+            size: _selectedIndex == 3 ? 30 : 24,
           ),
           label: 'Calls',
         ),
         BottomNavigationBarItem(
-          icon: IconButton(
-            onPressed: () {
-              appRouter.go(RouteNames.contact);
-            },
-            icon: Icon(
-              Icons.people_sharp,
-            ),
+          icon: Icon(
+            Icons.people_sharp,
+            size: _selectedIndex == 4 ? 30 : 24,
           ),
           label: 'Contacts',
         ),
       ],
-      currentIndex: _selectedIndex,
-      onTap: _onItemTapped,
     );
   }
 }
