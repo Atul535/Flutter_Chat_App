@@ -3,6 +3,7 @@ import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatList extends StatelessWidget {
   final List<ConversationPreview> conversations;
@@ -10,6 +11,36 @@ class ChatList extends StatelessWidget {
     super.key,
     required this.conversations,
   });
+
+  DateTime? _parseDate(dynamic date) {
+    if (date == null) return null;
+    try {
+      if (date is DateTime) return date.toLocal();
+      if (date is int) {
+        return DateTime.fromMillisecondsSinceEpoch(date).toLocal();
+      }
+      if (date is String) return DateTime.parse(date).toLocal();
+    } catch (_) {}
+    return null;
+  }
+
+  String _formatTime(dynamic date) {
+    final dt = _parseDate(date);
+    if (dt == null) return '';
+
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final messageDay = DateTime(dt.year, dt.month, dt.day);
+    final diff = today.difference(messageDay).inDays;
+
+    if (diff == 0) {
+      return DateFormat.jm().format(dt); // today -> time
+    } else if (diff == 1) {
+      return 'Yesterday';
+    } else {
+      return DateFormat.yMMMd().format(dt); // older -> date
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +63,14 @@ class ChatList extends StatelessWidget {
                 pathParameters: {
                   'senderId': conversation.currentUserId,
                   'receiverId': conversation.contactId,
-                  // 'conversationId': conversation.conversationId,
                 },
+                extra: conversation.conversationId,
               );
             },
             leading: CircleAvatar(
               radius: 25,
               backgroundColor: AppPallete.greyColor.withOpacity(0.5),
-              child: Icon(
+              child: const Icon(
                 Icons.person,
                 size: 30,
                 color: Colors.white,
@@ -48,14 +79,18 @@ class ChatList extends StatelessWidget {
             title: Text(
               conversation.contactName,
               style: TextStyle(
-                  color: AppPallete.whiteColor, fontWeight: FontWeight.bold),
+                color: AppPallete.whiteColor,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             subtitle: Text(
               conversation.lastMessage,
               style: TextStyle(color: AppPallete.whiteColor),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
             ),
             trailing: Text(
-              conversation.lastMessageTime,
+              _formatTime(conversation.lastMessageTime),
               style: TextStyle(color: AppPallete.greyColor),
             ),
           ),

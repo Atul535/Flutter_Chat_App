@@ -203,14 +203,13 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     if (currentUser == null) {
       throw Exception("User not authenticated");
     }
-    final response = await supabaseClient
-        .from('conversation_previews')
-        .select()
-        .eq('participant_user_id', currentUser.id);
+    final response =
+        await supabaseClient.from('conversation_previews').select();
+    // .eq('participant_user_id', currentUser.id);
 
     return (response as List)
         .map((e) => ConversationPreview(
-              // conversationId: e['conversation_id'] ?? '',
+              conversationId: e['conversation_id'] ?? '',
               contactId: e['contact_id'] ?? '',
               contactName: e['contact_name'] ?? '',
               contactEmail: e['contact_email'] ?? '',
