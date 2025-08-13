@@ -199,23 +199,23 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   @override
   Future<List<ConversationPreview>> getConversationPreviews() async {
     final currentUser = supabaseClient.auth.currentUser;
+    if (currentUser == null) throw Exception("User not authenticated");
 
-    if (currentUser == null) {
-      throw Exception("User not authenticated");
-    }
-    final response =
-        await supabaseClient.from('conversation_previews').select();
-    // .eq('participant_user_id', currentUser.id);
+    final response = await supabaseClient
+        .from('conversation_previews2')
+        .select()
+        .order('last_message_time', ascending: false);
 
     return (response as List)
         .map((e) => ConversationPreview(
               conversationId: e['conversation_id'] ?? '',
-              contactId: e['contact_id'] ?? '',
-              contactName: e['contact_name'] ?? '',
-              contactEmail: e['contact_email'] ?? '',
+              receiverId:
+                  e['receiver_id']?.toString() ?? '', // Convert to string
+              receiverName: e['receiver_name'] ?? '',
+              receiverEmail: e['receiver_email'] ?? '',
               lastMessage: e['last_message'] ?? '',
               lastMessageTime: e['last_message_time'] ?? '',
-              avatarUrl: e['avatar_url'] ?? '',
+              avatarUrl: e['receiver_avatar'] ?? '',
               currentUserId: currentUser.id,
             ))
         .toList();

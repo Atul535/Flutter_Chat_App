@@ -59,12 +59,13 @@ class ChatList extends StatelessWidget {
             tileColor: AppPallete.tileColor,
             onTap: () {
               appRouter.goNamed(
-                RouteNames.message,
+                RouteNames.message2,
                 pathParameters: {
                   'senderId': conversation.currentUserId,
-                  'receiverId': conversation.contactId,
+                  // 'receiverId': conversation.contactId,
+                  'receiverId': conversation.receiverId,
                 },
-                extra: conversation.conversationId,
+                extra: conversation,
               );
             },
             leading: CircleAvatar(
@@ -77,7 +78,8 @@ class ChatList extends StatelessWidget {
               ),
             ),
             title: Text(
-              conversation.contactName,
+              conversation.receiverName,
+              // conversation.contactName,
               style: TextStyle(
                 color: AppPallete.whiteColor,
                 fontWeight: FontWeight.bold,

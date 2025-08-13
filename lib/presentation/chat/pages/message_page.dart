@@ -41,27 +41,29 @@ class MessagePage extends StatelessWidget {
             }
 
             final messages = snapshot.data!;
+            final reversedMessages = messages.reversed.toList();
 
-            messages.sort((a, b) {
-              DateTime ta, tb;
-              try {
-                ta = DateTime.parse(a['created_at']?.toString() ?? '');
-              } catch (_) {
-                ta = DateTime.fromMillisecondsSinceEpoch(0);
-              }
-              try {
-                tb = DateTime.parse(b['created_at']?.toString() ?? '');
-              } catch (_) {
-                tb = DateTime.fromMillisecondsSinceEpoch(0);
-              }
-              return ta.compareTo(tb);
-            });
+            // messages.sort((a, b) {
+            //   DateTime ta, tb;
+            //   try {
+            //     ta = DateTime.parse(a['created_at']?.toString() ?? '');
+            //   } catch (_) {
+            //     ta = DateTime.fromMillisecondsSinceEpoch(0);
+            //   }
+            //   try {
+            //     tb = DateTime.parse(b['created_at']?.toString() ?? '');
+            //   } catch (_) {
+            //     tb = DateTime.fromMillisecondsSinceEpoch(0);
+            //   }
+            //   return ta.compareTo(tb);
+            // });
 
             return ListView.builder(
+              reverse: true,
               padding: const EdgeInsets.only(bottom: 80, top: 10),
-              itemCount: messages.length,
+              itemCount: reversedMessages.length,
               itemBuilder: (context, index) {
-                final msg = messages[index];
+                final msg = reversedMessages[index];
                 final isMe = msg['sender_id'] == senderId;
 
                 return Align(
@@ -90,6 +92,7 @@ class MessagePage extends StatelessWidget {
         ),
         bottomNavigationBar: MsgInputBox(
           receiverId: receiverId,
+          conversationId: conversationId,
         ),
       ),
     );

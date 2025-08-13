@@ -1,6 +1,7 @@
 // services/routing/app_router.dart
 
 import 'package:chat_app/domain/chat/entities/contact_entity.dart';
+import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
 import 'package:chat_app/presentation/auth/pages/login_page.dart';
 import 'package:chat_app/presentation/auth/pages/signup_page.dart';
 import 'package:chat_app/presentation/chat/contact/pages/add_contact_page.dart';
@@ -40,6 +41,21 @@ final GoRouter appRouter = GoRouter(
           receiverId: receiverId,
           receiverName: contact.name,
           conversationId: conversationId,
+        );
+      },
+    ),
+    GoRoute(
+      name: RouteNames.message2,
+      path: '/message2/:senderId/:receiverId:',
+      builder: (context, state) {
+        final senderId = state.pathParameters['senderId']!;
+        final receiverId = state.pathParameters['receiverId']!;
+        final preview = state.extra as ConversationPreview;
+        return MessagePage(
+          senderId: senderId,
+          receiverId: receiverId,
+          receiverName: preview.receiverName,
+          conversationId: preview.conversationId,
         );
       },
     ),

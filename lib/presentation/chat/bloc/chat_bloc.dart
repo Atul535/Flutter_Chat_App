@@ -52,9 +52,12 @@ class ChatBloc extends Bloc<ChatEvent, ChatState> {
           emit(ChatError('Failed to load messages: ${failure.message}'));
         },
         (messagesStream) {
-          _messagesSub = messagesStream.listen((messages) {
-            emit(MessageReceived(messages));
-          });
+          _messagesSub = messagesStream.listen(
+            (messages) {
+              emit(MessageReceived(messages));
+            },
+            onError: (error) => emit(ChatError('Stream error: $error')), //new line added
+          );
         },
       );
     } catch (e) {

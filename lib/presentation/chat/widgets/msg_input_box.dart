@@ -11,17 +11,18 @@ final _uuid = Uuid();
 String generateConversationId(String userA, String userB) {
   final sorted = [userA, userB]..sort();
   final combined = '${sorted[0]}:${sorted[1]}';
+  // ignore: deprecated_member_use
   return _uuid.v5(Uuid.NAMESPACE_URL, combined);
 }
 
 class MsgInputBox extends StatefulWidget {
   final String receiverId;
-  // final String conversationId;
+  final String conversationId;
 
   const MsgInputBox({
     super.key,
     required this.receiverId,
-    // required this.conversationId,
+    required this.conversationId,
   });
 
   @override
@@ -52,7 +53,8 @@ class _MsgInputBoxState extends State<MsgInputBox> {
       return;
     }
 
-    final convId = generateConversationId(currentUser.id, widget.receiverId);
+    final convId = widget.conversationId;
+    // final convId = generateConversationId(currentUser.id, widget.receiverId);
     debugPrint("🔍 Generated conversation ID: $convId");
 
     final message = ChatModel(
@@ -66,6 +68,9 @@ class _MsgInputBoxState extends State<MsgInputBox> {
 
     debugPrint("🔍 Created message: ${message.toJson()}");
     debugPrint("🔍 About to dispatch SendMessageEvent");
+
+    debugPrint("🔍 Sending message to conversation: $convId");
+    debugPrint("🔍 Message content: $text");
 
     context.read<ChatBloc>().add(SendMessageEvent(
           content: message,
