@@ -44,11 +44,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return BottomNavigationBar(
       backgroundColor: AppPallete.appBarColor,
       type: BottomNavigationBarType.fixed,
-      selectedLabelStyle: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.bold,
-          color: AppPallete.whiteColor),
-      unselectedLabelStyle: TextStyle(fontSize: 12),
+      selectedItemColor: AppPallete.primaryColor, // Blue for selected
+      unselectedItemColor: AppPallete.whiteColor,
       currentIndex: _selectedIndex,
       onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
@@ -64,7 +61,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
             Icons.notifications_none,
             size: _selectedIndex == 1 ? 30 : 24,
           ),
-          label: 'Notifications',
+          label: 'Notification',
         ),
         BottomNavigationBarItem(
           icon: Icon(
