@@ -4,7 +4,7 @@ import 'package:chat_app/presentation/chat/widgets/msg_input_box.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class MessagePage extends StatelessWidget {
+class MessagePage extends StatefulWidget {
   final String senderId;
   final String receiverId;
   final String receiverName;
@@ -19,18 +19,26 @@ class MessagePage extends StatelessWidget {
   });
 
   @override
+  State<MessagePage> createState() => _MessagePageState();
+}
+
+class _MessagePageState extends State<MessagePage> {
+  @override
   Widget build(BuildContext context) {
     final supabase = Supabase.instance.client;
     return SafeArea(
       child: Scaffold(
         appBar: MessageAppBar(
-          name: receiverName,
+          name: widget.receiverName,
           status: 'online',
         ),
         body: StreamBuilder<List<Map<String, dynamic>>>(
-          stream: supabase.from('messages').stream(primaryKey: ['id'])
-              .eq('conversation_id', conversationId)
-              .order('created_at'),
+          stream: supabase
+              .from('messages')
+              .stream(primaryKey: ['id'])
+              .eq('conversation_id', widget.conversationId)
+              .order('created_at', ascending: false)
+              .asBroadcastStream(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -41,30 +49,13 @@ class MessagePage extends StatelessWidget {
             }
 
             final messages = snapshot.data!;
-            final reversedMessages = messages.reversed.toList();
-
-            // messages.sort((a, b) {
-            //   DateTime ta, tb;
-            //   try {
-            //     ta = DateTime.parse(a['created_at']?.toString() ?? '');
-            //   } catch (_) {
-            //     ta = DateTime.fromMillisecondsSinceEpoch(0);
-            //   }
-            //   try {
-            //     tb = DateTime.parse(b['created_at']?.toString() ?? '');
-            //   } catch (_) {
-            //     tb = DateTime.fromMillisecondsSinceEpoch(0);
-            //   }
-            //   return ta.compareTo(tb);
-            // });
-
             return ListView.builder(
               reverse: true,
               padding: const EdgeInsets.only(bottom: 80, top: 10),
-              itemCount: reversedMessages.length,
+              itemCount: messages.length,
               itemBuilder: (context, index) {
-                final msg = reversedMessages[index];
-                final isMe = msg['sender_id'] == senderId;
+                final msg = messages[index];
+                final isMe = msg['sender_id'] == widget.senderId;
 
                 return Align(
                   alignment:
@@ -91,8 +82,8 @@ class MessagePage extends StatelessWidget {
           },
         ),
         bottomNavigationBar: MsgInputBox(
-          receiverId: receiverId,
-          conversationId: conversationId,
+          receiverId: widget.receiverId,
+          conversationId: widget.conversationId,
         ),
       ),
     );
