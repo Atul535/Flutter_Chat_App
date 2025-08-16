@@ -9,6 +9,7 @@ import 'package:chat_app/presentation/chat/pages/chat_page.dart';
 import 'package:chat_app/presentation/chat/contact/pages/contact_page.dart';
 import 'package:chat_app/presentation/chat/pages/message_page.dart';
 import 'package:chat_app/presentation/chat/pages/my_profile.dart';
+import 'package:chat_app/presentation/chat/pages/update_profile.dart';
 import 'package:chat_app/presentation/chat/widgets/msg_input_box.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:go_router/go_router.dart';
@@ -70,6 +71,10 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: RouteNames.addcontact,
       builder: (context, state) => const AddContactPage(),
+    ),
+    GoRoute(
+      path: RouteNames.update,
+      builder: (context, state) => const UpdateProfile(),
     ),
   ],
 );

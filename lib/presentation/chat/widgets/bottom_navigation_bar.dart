@@ -66,7 +66,7 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         BottomNavigationBarItem(
           icon: Icon(
             Icons.add_circle_outlined,
-            size: 50,
+            size: 60,
             color: AppPallete.primaryColor,
           ),
           label: '',

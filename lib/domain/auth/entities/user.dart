@@ -4,11 +4,13 @@ class User {
   final String name;
   final String mobile;
   final String email;
+  final String? password;
   User({
     required this.id,
     required this.name,
     required this.mobile,
     required this.email,
+    this.password,
   });
 
   factory User.emptyFactory() => User(
@@ -16,5 +18,6 @@ class User {
         name: '',
         email: '',
         mobile: '',
+        password: null,
       );
 }
