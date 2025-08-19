@@ -18,3 +18,8 @@ final class AuthFailure extends AuthState {
 }
 
 class AuthUnauthenticated extends AuthState {}
+
+class AuthUpdateSuccess extends AuthState {
+  final UserModel user;
+  AuthUpdateSuccess(this.user);
+}

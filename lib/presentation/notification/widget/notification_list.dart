@@ -1,22 +1,21 @@
 import 'package:chat_app/core/theme/colors.dart';
-import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
-import 'package:chat_app/services/routing/app_router.dart';
-import 'package:chat_app/services/routing/route_name.dart';
+import 'package:chat_app/domain/chat/entities/notification_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class ChatList extends StatefulWidget {
-  final List<ConversationPreview> conversations;
-  const ChatList({
+class NotificationList extends StatefulWidget {
+  final List<NotificationEntity> notifications;
+  const NotificationList({
     super.key,
-    required this.conversations,
+    required this.notifications,
   });
 
   @override
-  State<ChatList> createState() => _ChatListState();
+  // ignore: library_private_types_in_public_api
+  _NotificationListState createState() => _NotificationListState();
 }
 
-class _ChatListState extends State<ChatList> {
+class _NotificationListState extends State<NotificationList> {
   DateTime? _parseDate(dynamic date) {
     if (date == null) return null;
     try {
@@ -39,20 +38,20 @@ class _ChatListState extends State<ChatList> {
     final diff = today.difference(messageDay).inDays;
 
     if (diff == 0) {
-      return DateFormat.jm().format(dt); // today -> time
+      return DateFormat.jm().format(dt);
     } else if (diff == 1) {
       return 'Yesterday';
     } else {
-      return DateFormat.yMMMd().format(dt); // older -> date
+      return DateFormat.yMMMd().format(dt);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: widget.conversations.length,
+      itemCount: widget.notifications.length,
       itemBuilder: (context, index) {
-        final conversation = widget.conversations[index];
+        final notification = widget.notifications[index];
         return Container(
           margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
           decoration: BoxDecoration(
@@ -62,42 +61,21 @@ class _ChatListState extends State<ChatList> {
           ),
           child: ListTile(
             tileColor: AppPallete.tileColor,
-            onTap: () {
-              appRouter.goNamed(
-                RouteNames.message2,
-                pathParameters: {
-                  'senderId': conversation.currentUserId,
-                  // 'receiverId': conversation.contactId,
-                  'receiverId': conversation.receiverId,
-                },
-                extra: conversation,
-              );
-            },
-            leading: CircleAvatar(
-              radius: 25,
-              backgroundColor: AppPallete.greyColor.withOpacity(0.5),
-              child: const Icon(
-                Icons.person,
-                size: 30,
-                color: Colors.white,
-              ),
-            ),
             title: Text(
-              conversation.receiverName,
-              // conversation.contactName,
+              notification.title,
               style: TextStyle(
                 color: AppPallete.whiteColor,
                 fontWeight: FontWeight.bold,
               ),
             ),
             subtitle: Text(
-              conversation.lastMessage,
+              notification.body,
               style: TextStyle(color: AppPallete.whiteColor),
               overflow: TextOverflow.ellipsis,
               maxLines: 1,
             ),
             trailing: Text(
-              _formatTime(conversation.lastMessageTime),
+              _formatTime(notification.createdAt),
               style: TextStyle(color: AppPallete.greyColor),
             ),
           ),

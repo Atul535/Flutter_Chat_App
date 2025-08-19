@@ -18,4 +18,10 @@ abstract interface class AuthRepository {
   Future<Either<Failure, User>> currentUser();
 
   Future<Either<Failure, void>> logoutUser();
+
+  Future<Either<Failure, User>> updateProfile({
+    required String name,
+    required String mobile,
+    required String email,
+  });
 }

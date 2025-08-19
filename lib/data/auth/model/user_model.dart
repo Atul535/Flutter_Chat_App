@@ -4,7 +4,7 @@ class UserModel extends User {
   UserModel({
     required super.id,
     required super.name,
-    required super.mobile,
+    required super.phone,
     required super.email,
     super.password,
   });
@@ -13,7 +13,7 @@ class UserModel extends User {
     return UserModel(
       id: map['id'] ?? '',
       name: map['name'] ?? '',
-      mobile: map['mobile'] ?? '',
+      phone: map['phone'] ?? '',
       email: map['email'] ?? '',
       password: map['password'],
     );
@@ -22,14 +22,14 @@ class UserModel extends User {
   UserModel copyWith({
     String? id,
     String? name,
-    String? mobile,
+    String? phone,
     String? email,
     String? password,
   }) {
     return UserModel(
       id: id ?? this.id,
       name: name ?? this.name,
-      mobile: mobile ?? this.mobile,
+      phone: phone ?? this.phone,
       email: email ?? this.email,
       password: password ?? this.password,
     );

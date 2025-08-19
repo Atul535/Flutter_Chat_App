@@ -81,9 +81,15 @@ class _MessagePageState extends State<MessagePage> {
             );
           },
         ),
-        bottomNavigationBar: MsgInputBox(
-          receiverId: widget.receiverId,
-          conversationId: widget.conversationId,
+        bottomNavigationBar: AnimatedPadding(
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeOut,
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: MsgInputBox(
+            receiverId: widget.receiverId,
+            conversationId: widget.conversationId,
+          ),
         ),
       ),
     );

@@ -20,6 +20,12 @@ abstract interface class AuthRemoteDataSource {
   Future<UserModel?> getCurrentUserData();
 
   Future<void> logout();
+
+  Future<UserModel> updateProfile({
+    required String name,
+    required String mobile,
+    required String email,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -99,6 +105,29 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     try {
       final res = await supabaseClient.auth.signOut();
       return res;
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> updateProfile({
+    required String name,
+    required String mobile,
+    required String email,
+  }) async {
+    try {
+      final response = await supabaseClient
+          .from('profiles')
+          .update({
+            'name': name,
+            'phone': mobile,
+            'email': email,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', currentUserSession!.user.id)
+          .select();
+      return UserModel.fromJson(response.first);
     } catch (e) {
       throw ServerException(e.toString());
     }

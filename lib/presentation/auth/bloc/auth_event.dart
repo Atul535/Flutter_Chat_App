@@ -16,6 +16,17 @@ final class AuthSignup extends AuthEvent {
   });
 }
 
+final class AuthUpdateProfile extends AuthEvent {
+  final String name;
+  final String email;
+  final String mobile;
+  AuthUpdateProfile({
+    required this.name,
+    required this.email,
+    required this.mobile,
+  });
+}
+
 final class AuthLogin extends AuthEvent {
   final String email;
   final String password;

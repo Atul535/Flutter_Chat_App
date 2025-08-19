@@ -91,7 +91,7 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 35.0, vertical: 30.0),
+                        horizontal: 30.0, vertical: 30.0),
                     child: Column(
                       children: [
                         Row(
@@ -99,13 +99,13 @@ class _MyProfileState extends State<MyProfile> {
                             const Text(
                               'Name : ',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
                               " $displayName",
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                               ),
                             ),
                           ],
@@ -116,13 +116,13 @@ class _MyProfileState extends State<MyProfile> {
                             const Text(
                               'Email : ',
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                               ),
                             ),
                             Text(
                               " $displayEmail",
                               style: TextStyle(
-                                fontSize: 20,
+                                fontSize: 18,
                               ),
                             ),
                           ],

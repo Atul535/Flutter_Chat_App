@@ -14,12 +14,14 @@ class ContactList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final sortedContacts = [...contacts]
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
     final currentUser = Supabase.instance.client.auth.currentUser;
     final myId = currentUser?.id;
     return ListView.builder(
-        itemCount: contacts.length,
+        itemCount: sortedContacts.length,
         itemBuilder: (context, index) {
-          final contact = contacts[index];
+          final contact = sortedContacts[index];
           return Container(
             margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             decoration: BoxDecoration(

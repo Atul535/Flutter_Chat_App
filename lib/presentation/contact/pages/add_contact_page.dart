@@ -1,5 +1,5 @@
 import 'package:chat_app/core/theme/colors.dart';
-import 'package:chat_app/presentation/chat/contact/bloc/contact_bloc.dart';
+import 'package:chat_app/presentation/contact/bloc/contact_bloc.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 void snackBar(BuildContext context, String message) {
-  final snackBar = SnackBar(content: Text(message));
+  final snackBar = SnackBar(content: Center(child: Text(message)));
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(snackBar);

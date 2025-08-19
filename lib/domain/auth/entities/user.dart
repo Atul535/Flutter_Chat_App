@@ -2,22 +2,14 @@
 class User {
   final String id;
   final String name;
-  final String mobile;
+  final String phone;
   final String email;
   final String? password;
   User({
     required this.id,
     required this.name,
-    required this.mobile,
+    required this.phone,
     required this.email,
     this.password,
   });
-
-  factory User.emptyFactory() => User(
-        id: '',
-        name: '',
-        email: '',
-        mobile: '',
-        password: null,
-      );
 }

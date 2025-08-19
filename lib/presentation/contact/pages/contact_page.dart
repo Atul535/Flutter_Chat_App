@@ -21,7 +21,7 @@
 //   void initState() {
 //     super.initState();
 //     context.read<ContactBloc>().add(LoadContactsEvent());
-    
+
 //   }
 
 //   @override
@@ -102,11 +102,10 @@
 //   }
 // }
 
-
 import 'package:chat_app/core/theme/colors.dart';
 import 'package:chat_app/core/utils/loader.dart';
-import 'package:chat_app/presentation/chat/contact/bloc/contact_bloc.dart';
-import 'package:chat_app/presentation/chat/widgets/bottom_navigation_bar.dart';
+import 'package:chat_app/presentation/contact/bloc/contact_bloc.dart';
+import 'package:chat_app/presentation/chat/widgets/custom_bottom_navigation_bar.dart';
 import 'package:chat_app/presentation/chat/widgets/contact_list.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:chat_app/services/routing/route_name.dart';
@@ -194,8 +193,8 @@ class _ContactPageState extends State<ContactPage> {
                   } else if (state is ContactLoaded) {
                     final query = _searchController.text.toLowerCase();
                     final filtered = state.contacts.where((contact) {
-                      final name = contact.name?.toLowerCase() ?? '';
-                      final email = contact.email?.toLowerCase() ?? '';
+                      final name = contact.name.toLowerCase();
+                      final email = contact.email.toLowerCase();
                       return name.contains(query) || email.contains(query);
                     }).toList();
 

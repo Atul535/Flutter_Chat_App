@@ -9,15 +9,15 @@ import 'package:chat_app/services/routing/route_name.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class UpdateProfile extends StatefulWidget {
-  const UpdateProfile({super.key});
+class UpdateProfilePage extends StatefulWidget {
+  const UpdateProfilePage({super.key});
 
   @override
   // ignore: library_private_types_in_public_api
-  _UpdateProfileState createState() => _UpdateProfileState();
+  _UpdateProfilePageState createState() => _UpdateProfilePageState();
 }
 
-class _UpdateProfileState extends State<UpdateProfile> {
+class _UpdateProfilePageState extends State<UpdateProfilePage> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -67,20 +67,20 @@ class _UpdateProfileState extends State<UpdateProfile> {
             }
           },
           builder: (context, state) {
-            String displayName = 'User Name';
-            String displayEmail = 'User Email';
-            String displayPhone = 'User Phone';
-            if (state is AuthSuccess) {
-              final user = state.user;
-              displayName = (user.name.isNotEmpty) ? user.name : displayName;
-              displayEmail =
-                  (user.email.isNotEmpty) ? user.email : displayEmail;
-              displayPhone =
-                  (user.mobile.isNotEmpty) ? user.mobile : displayPhone;
-            }
-
             if (state is AuthLoading) {
               return const Center(child: Loader());
+            }
+            if (state is AuthSuccess) {
+              final user = state.user;
+              if (nameController.text.isEmpty) {
+                nameController.text = user.name;
+              }
+              if (emailController.text.isEmpty) {
+                emailController.text = user.email;
+              }
+              if (mobileController.text.isEmpty) {
+                mobileController.text = user.phone;
+              }
             }
             return SingleChildScrollView(
               child: Padding(
@@ -91,17 +91,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     children: [
                       const SizedBox(height: 50),
                       AuthField(
-                        hintText: displayName,
+                        hintText: 'Name',
                         controller: nameController,
                       ),
                       const SizedBox(height: 18),
                       AuthField(
-                        hintText: displayEmail,
+                        hintText: "Email",
                         controller: emailController,
+                        isEnabled: false,
                       ),
                       const SizedBox(height: 18),
                       AuthField(
-                        hintText: displayPhone,
+                        hintText: 'Mobile No.',
                         controller: mobileController,
                       ),
                       const SizedBox(height: 30),
@@ -110,18 +111,18 @@ class _UpdateProfileState extends State<UpdateProfile> {
                         onpressed: () {
                           if (formKey.currentState!.validate()) {
                             context.read<AuthBloc>().add(
-                                  AuthSignup(
+                                  AuthUpdateProfile(
                                     name: nameController.text.trim(),
                                     email: emailController.text.trim(),
                                     mobile: mobileController.text.trim(),
-                                    password: passwordController.text.trim(),
                                   ),
                                 );
                             debugPrint(nameController.text);
                             debugPrint(mobileController.text);
                             debugPrint(emailController.text);
+                            snackBar(context, 'Profile updated successfully');
+                            appRouter.go(RouteNames.profile);
                           }
-                          appRouter.go(RouteNames.profile);
                         },
                       ),
                     ],

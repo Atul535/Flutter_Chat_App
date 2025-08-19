@@ -14,18 +14,22 @@ class CustomBottomNavigationBar extends StatefulWidget {
 }
 
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  int _selectedIndex = 0;
+  int _indexForLocation(String location) {
+    if (location.startsWith(RouteNames.home)) return 0;
+    if (location.startsWith(RouteNames.notification)) return 1;
+    if (location.startsWith(RouteNames.addcontact)) return 2;
+    if (location.startsWith(RouteNames.calls)) return 3;
+    if (location.startsWith(RouteNames.contact)) return 4;
+    return 0; // default
+  }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
     switch (index) {
       case 0:
         appRouter.go(RouteNames.home);
         break;
       case 1:
-        // Handle notifications
+        appRouter.go(RouteNames.notification);
         break;
       case 2:
         appRouter.go(RouteNames.addcontact);
@@ -41,25 +45,28 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final location =
+        appRouter.routerDelegate.currentConfiguration.last.matchedLocation;
+    final selectedIndex = _indexForLocation(location);
     return BottomNavigationBar(
       backgroundColor: AppPallete.appBarColor,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: AppPallete.primaryColor, // Blue for selected
       unselectedItemColor: AppPallete.whiteColor,
-      currentIndex: _selectedIndex,
+      currentIndex: selectedIndex,
       onTap: _onItemTapped,
       items: <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(
             Icons.chat_bubble_outline,
-            size: _selectedIndex == 0 ? 30 : 24,
+            size: selectedIndex == 0 ? 30 : 24,
           ),
           label: 'Message',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.notifications_none,
-            size: _selectedIndex == 1 ? 30 : 24,
+            size: selectedIndex == 1 ? 30 : 24,
           ),
           label: 'Notification',
         ),
@@ -74,14 +81,14 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
         BottomNavigationBarItem(
           icon: Icon(
             Icons.call,
-            size: _selectedIndex == 3 ? 30 : 24,
+            size: selectedIndex == 3 ? 30 : 24,
           ),
           label: 'Calls',
         ),
         BottomNavigationBarItem(
           icon: Icon(
             Icons.people_sharp,
-            size: _selectedIndex == 4 ? 30 : 24,
+            size: selectedIndex == 4 ? 30 : 24,
           ),
           label: 'Contacts',
         ),

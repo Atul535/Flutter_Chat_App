@@ -2,15 +2,17 @@
 
 import 'package:chat_app/domain/chat/entities/contact_entity.dart';
 import 'package:chat_app/domain/chat/entities/conversation_preview.dart';
+import 'package:chat_app/domain/chat/entities/notification_entity.dart';
 import 'package:chat_app/presentation/auth/pages/login_page.dart';
 import 'package:chat_app/presentation/auth/pages/signup_page.dart';
-import 'package:chat_app/presentation/chat/contact/pages/add_contact_page.dart';
+import 'package:chat_app/presentation/contact/pages/add_contact_page.dart';
 import 'package:chat_app/presentation/chat/pages/chat_page.dart';
-import 'package:chat_app/presentation/chat/contact/pages/contact_page.dart';
+import 'package:chat_app/presentation/contact/pages/contact_page.dart';
 import 'package:chat_app/presentation/chat/pages/message_page.dart';
 import 'package:chat_app/presentation/chat/pages/my_profile.dart';
-import 'package:chat_app/presentation/chat/pages/update_profile.dart';
+import 'package:chat_app/presentation/chat/pages/update_profile_page.dart';
 import 'package:chat_app/presentation/chat/widgets/msg_input_box.dart';
+import 'package:chat_app/presentation/notification/pages/notification_page.dart';
 import 'package:chat_app/services/routing/route_name.dart';
 import 'package:go_router/go_router.dart';
 
@@ -74,7 +76,13 @@ final GoRouter appRouter = GoRouter(
     ),
     GoRoute(
       path: RouteNames.update,
-      builder: (context, state) => const UpdateProfile(),
+      builder: (context, state) => const UpdateProfilePage(),
     ),
+    GoRoute(
+        path: RouteNames.notification,
+        builder: (context, state) {
+          final notifications = state.extra as List<NotificationEntity>? ?? [];
+          return NotificationPage(notifications: notifications);
+        }),
   ],
 );

@@ -9,6 +9,7 @@ import 'package:chat_app/data/chat/repositories/contact_repository_impl.dart';
 import 'package:chat_app/domain/auth/repositories/auth_repository.dart';
 import 'package:chat_app/domain/auth/usecases/current_user.dart';
 import 'package:chat_app/domain/auth/usecases/logout_user.dart';
+import 'package:chat_app/domain/auth/usecases/update_profile.dart';
 import 'package:chat_app/domain/auth/usecases/user_login.dart';
 import 'package:chat_app/domain/auth/usecases/user_sign_up.dart';
 import 'package:chat_app/domain/chat/repositories/chat_repository.dart';
@@ -20,7 +21,7 @@ import 'package:chat_app/domain/chat/usecases/get_message.dart';
 import 'package:chat_app/domain/chat/usecases/send_message.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
-import 'package:chat_app/presentation/chat/contact/bloc/contact_bloc.dart';
+import 'package:chat_app/presentation/contact/bloc/contact_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -52,13 +53,13 @@ void _initAuth() {
     ..registerFactory<UserLogin>(() => UserLogin(serviceLocator()))
     ..registerFactory<CurrentUser>(() => CurrentUser(serviceLocator()))
     ..registerFactory<LogoutUser>(() => LogoutUser(serviceLocator()))
-    ..registerFactory<GetConversationPreviews>(
-        () => GetConversationPreviews(serviceLocator()))
+    ..registerFactory<UpdateProfile>(() => UpdateProfile(serviceLocator()))
     ..registerFactory<AuthBloc>(() => AuthBloc(
           userSignUp: serviceLocator(),
           userLogin: serviceLocator(),
           currentUser: serviceLocator(),
           logoutUser: serviceLocator(),
+          updateProfile: serviceLocator(),
         ));
 }
 
@@ -72,6 +73,8 @@ void _initChat() {
         () => GetMessage(serviceLocator<ChatRepository>()))
     ..registerFactory<SendMessage>(
         () => SendMessage(serviceLocator<ChatRepository>()))
+    ..registerFactory<GetConversationPreviews>(
+        () => GetConversationPreviews(serviceLocator()))
     ..registerFactory<ChatBloc>(() => ChatBloc(
           getMessage: serviceLocator<GetMessage>(),
           sendMessage: serviceLocator<SendMessage>(),
