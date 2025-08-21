@@ -1,4 +1,4 @@
-import 'package:chat_app/domain/chat/entities/notification_entity.dart';
+import 'package:chat_app/domain/notification/entities/notification_entity.dart';
 
 class NotificationModel {
   final String id;
@@ -20,14 +20,33 @@ class NotificationModel {
   });
 
   factory NotificationModel.fromMap(Map<String, dynamic> map) {
+    // Defensive parsing: handle nulls and different types reliably
+    final id = map['id']?.toString() ?? '';
+    final userId = map['user_id']?.toString() ?? '';
+    final title = map['title']?.toString() ?? '';
+    final body = map['body']?.toString() ?? '';
+    final metadata =
+        map['metadata'] != null ? map['metadata'].toString() : '{}';
+    final isRead = (map['is_read'] is bool) ? map['is_read'] as bool : false;
+
+    DateTime createdAt;
+    try {
+      final createdRaw = map['created_at']?.toString();
+      createdAt = createdRaw != null && createdRaw.isNotEmpty
+          ? DateTime.parse(createdRaw)
+          : DateTime.now();
+    } catch (_) {
+      createdAt = DateTime.now();
+    }
+
     return NotificationModel(
-      id: map['id'] ?? '',
-      userId: map['user_id'] ?? '',
-      title: map['title'] ?? '',
-      body: map['body'] ?? '',
-      metadata: map['metadata'] ?? '',
-      isRead: map['is_read'] ?? false,
-      createdAt: DateTime.parse(map['created_at']),
+      id: id,
+      userId: userId,
+      title: title,
+      body: body,
+      metadata: metadata,
+      isRead: isRead,
+      createdAt: createdAt,
     );
   }
 

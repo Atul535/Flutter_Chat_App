@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:chat_app/data/notifications/model/notification_model.dart';
-import 'package:chat_app/domain/chat/entities/notification_entity.dart';
+import 'package:chat_app/domain/notification/entities/notification_entity.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 abstract interface class NotificationRemoteDataSource {
@@ -23,9 +23,13 @@ abstract interface class NotificationRemoteDataSource {
   Future<void> markNotificationAsRead({
     required String notificationId,
   });
+
+  Future<int> fetchUnreadCount({required String userId});
 }
 
 class NotificationRemoteDataSourceImpl extends NotificationRemoteDataSource {
+  final SupabaseClient supabaseClient;
+  NotificationRemoteDataSourceImpl(this.supabaseClient);
   final supabase = Supabase.instance.client;
   @override
   Future<List<String>> fetchNotifications({required String userId}) async {
@@ -59,10 +63,23 @@ class NotificationRemoteDataSourceImpl extends NotificationRemoteDataSource {
       {required String userId,
       required String title,
       required String body,
-      String? metadata}) async {}
+      String? metadata}) async {
+    try {
+      await supabase.from('notifications').insert({
+        'user_id': userId,
+        'title': title,
+        'body': body,
+        'metadata': metadata ?? {},
+        'is_read': false,
+      });
+    } catch (e) {
+      throw Exception('Failed to send notification: $e');
+    }
+  }
 
   @override
-  Stream<List<NotificationEntity>> watchNotifications({required String userId}) {
+  Stream<List<NotificationEntity>> watchNotifications(
+      {required String userId}) {
     final controller = StreamController<List<NotificationModel>>.broadcast();
     final res = supabase
         .from('notifications')
@@ -82,5 +99,21 @@ class NotificationRemoteDataSourceImpl extends NotificationRemoteDataSource {
 
     return controller.stream.map(
         (notifications) => notifications.map((e) => e.toEntity()).toList());
+  }
+
+  @override
+  Future<int> fetchUnreadCount({required String userId}) async{
+    try{
+      final res=await supabase
+      .from('notifications')
+      .select()
+      .eq('user_id', userId)
+      .eq('is_read', false)
+      .count();
+      return res.count;
+    }
+    catch (e) {
+      throw Exception('Failed to fetch unread count: $e');
+    }
   }
 }

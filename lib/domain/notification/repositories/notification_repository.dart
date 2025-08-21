@@ -1,5 +1,5 @@
 import 'package:chat_app/core/utils/failure.dart';
-import 'package:chat_app/domain/chat/entities/notification_entity.dart';
+import 'package:chat_app/domain/notification/entities/notification_entity.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class NotificationRepository {

@@ -3,6 +3,7 @@ import 'package:chat_app/di/init_dependency.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/contact/bloc/contact_bloc.dart';
+import 'package:chat_app/presentation/notification/bloc/notification_bloc.dart';
 import 'package:chat_app/services/routing/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,8 +23,11 @@ Future<void> main() async {
         BlocProvider(
           create: (_) => serviceLocator<ContactBloc>(),
         ),
+        BlocProvider(
+          create: (_) => serviceLocator<NotificationBloc>(),
+        ),
       ],
-      child: const MyApp(),  
+      child: const MyApp(),
     ),
   );
 }
@@ -36,7 +40,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(

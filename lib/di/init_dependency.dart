@@ -6,6 +6,8 @@ import 'package:chat_app/data/chat/datasource/chat_remote_data_source_impl.dart'
 import 'package:chat_app/data/chat/datasource/contact_remote_data_source_impl.dart';
 import 'package:chat_app/data/chat/repositories/chat_repository_impl.dart';
 import 'package:chat_app/data/chat/repositories/contact_repository_impl.dart';
+import 'package:chat_app/data/notifications/datasource/notification_remote_data_source_impl.dart';
+import 'package:chat_app/data/notifications/repository/notification_repository_impl.dart';
 import 'package:chat_app/domain/auth/repositories/auth_repository.dart';
 import 'package:chat_app/domain/auth/usecases/current_user.dart';
 import 'package:chat_app/domain/auth/usecases/logout_user.dart';
@@ -19,9 +21,13 @@ import 'package:chat_app/domain/chat/usecases/get_contacts.dart';
 import 'package:chat_app/domain/chat/usecases/get_conversation_previews.dart';
 import 'package:chat_app/domain/chat/usecases/get_message.dart';
 import 'package:chat_app/domain/chat/usecases/send_message.dart';
+import 'package:chat_app/domain/notification/repositories/notification_repository.dart';
+import 'package:chat_app/domain/notification/usecases/send_notification.dart';
+import 'package:chat_app/domain/notification/usecases/watch_notification.dart';
 import 'package:chat_app/presentation/auth/bloc/auth_bloc.dart';
 import 'package:chat_app/presentation/chat/bloc/chat_bloc.dart';
 import 'package:chat_app/presentation/contact/bloc/contact_bloc.dart';
+import 'package:chat_app/presentation/notification/bloc/notification_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -41,6 +47,7 @@ Future<void> initDependency() async {
   _initAuth();
   _initChat();
   _initContact();
+  _initNotification();
 }
 
 void _initAuth() {
@@ -93,5 +100,22 @@ void _initContact() {
     ..registerFactory<ContactBloc>(() => ContactBloc(
           serviceLocator<GetContacts>(),
           serviceLocator<AddContact>(),
+        ));
+}
+
+void _initNotification() {
+  serviceLocator
+    ..registerFactory<NotificationRemoteDataSource>(() =>
+        NotificationRemoteDataSourceImpl(serviceLocator<SupabaseClient>()))
+    ..registerFactory<NotificationRepository>(() => NotificationRepositoryImpl(
+        serviceLocator<NotificationRemoteDataSource>()))
+    ..registerFactory<SendNotification>(
+        () => SendNotification(serviceLocator()))
+    ..registerFactory<WatchNotification>(
+        () => WatchNotification(serviceLocator()))
+    ..registerFactory<NotificationBloc>(() => NotificationBloc(
+          serviceLocator<SendNotification>(),
+          serviceLocator<WatchNotification>(),
+          serviceLocator<NotificationRepository>(),
         ));
 }
